@@ -522,12 +522,15 @@ td strong{color:var(--text);font-weight:500}
 <script>
 // ===== SUPABASE INIT =====
 // ─── PEGA TUS CREDENCIALES AQUÍ ───────────────────────────────────────────
-const SUPABASE_URL = 'https://tlabfdavbcsfxekeazzr.supabase.co';   // ej: https://xyzabc.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsYWJmZGF2YmNzZnhla2VhenpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTA0NTEsImV4cCI6MjA5MzQ2NjQ1MX0.rUs8AFSjSceEsney98UvSdCVvaDyPCILI27My_1ffS4';   // ej: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+const SUPABASE_URL = '';   // ej: https://xyzabc.supabase.co
+const SUPABASE_KEY = '';   // ej: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 // ──────────────────────────────────────────────────────────────────────────
+
 let sb = null;
 
 function getSavedCreds() {
+  // Si hay credenciales hardcoded, usarlas directamente
+  if (SUPABASE_URL && SUPABASE_KEY) return { url: SUPABASE_URL, key: SUPABASE_KEY };
   return { url: localStorage.getItem('aw_sb_url'), key: localStorage.getItem('aw_sb_key') };
 }
 
@@ -1044,10 +1047,12 @@ async function renderClientes(q='') {
 (function boot() {
   const { url, key } = getSavedCreds();
   if (url && key) {
-    document.getElementById('cfg-url').value = url;
-    document.getElementById('cfg-key').value = key;
-    sb = supabase.createClient(url, key);
-    iniciarApp();
+    try {
+      sb = supabase.createClient(url, key);
+      iniciarApp();
+    } catch(e) {
+      console.error("Error al iniciar Supabase:", e);
+    }
   }
 })();
 </script>
