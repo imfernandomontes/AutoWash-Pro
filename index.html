@@ -12,7 +12,7 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fm);font-size:13px}
 
 /* LOGIN */
-#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+#login-screen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:999}
 .login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:40px;width:400px;text-align:center}
 .login-logo{font-family:var(--fh);font-size:28px;font-weight:700;color:var(--green);margin-bottom:8px}
 .login-sub{font-size:12px;color:var(--text3);margin-bottom:32px;line-height:1.6}
@@ -369,11 +369,10 @@ td strong{color:var(--text);font-weight:500}
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== SUPABASE INIT =====
-// ─── PEGA TUS CREDENCIALES AQUÍ ───────────────────────────────────────────
-const SUPABASE_URL = 'https://tlabfdavbcsfxekeazzr.supabase.co';   // ej: https://xyzabc.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsYWJmZGF2YmNzZnhla2VhenpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTA0NTEsImV4cCI6MjA5MzQ2NjQ1MX0.rUs8AFSjSceEsney98UvSdCVvaDyPCILI27My_1ffS4';   // ej: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-// ──────────────────────────────────────────────────────────────────────────
+// ─── CREDENCIALES ──────────────────────────────────────────────
+const SUPABASE_URL = 'https://tlabfdavbcsfxekeazzr.supabase.co';  // https://xxxx.supabase.co
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsYWJmZGF2YmNzZnhla2VhenpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTA0NTEsImV4cCI6MjA5MzQ2NjQ1MX0.rUs8AFSjSceEsney98UvSdCVvaDyPCILI27My_1ffS4';  // eyJ...
+// ───────────────────────────────────────────────────────────────
 
 const COLS=['var(--green)','var(--blue)','var(--amber)','var(--purple)'];
 const COLBG=['var(--gdim)','var(--bdim)','var(--adim)','var(--pdim)'];
@@ -610,16 +609,32 @@ async function renderAdmin(){
 window.addEventListener('load', async () => {
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Escuchar cambios de sesión
+  function showApp(user) {
+    setUserUI(user);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    renderDashboard();
+  }
+
+  function showLogin() {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+
+  // Primero verificar si hay sesión activa (incluyendo redirect de OAuth)
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    showApp(session.user);
+  } else {
+    showLogin();
+  }
+
+  // Escuchar cambios futuros (logout, login)
   sb.auth.onAuthStateChange(async (event, session) => {
-    if (session?.user) {
-      setUserUI(session.user);
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('app').style.display = 'flex';
-      await renderDashboard();
-    } else {
-      document.getElementById('app').style.display = 'none';
-      document.getElementById('login-screen').style.display = 'flex';
+    if (event === 'SIGNED_IN' && session?.user) {
+      showApp(session.user);
+    } else if (event === 'SIGNED_OUT') {
+      showLogin();
     }
   });
 });
