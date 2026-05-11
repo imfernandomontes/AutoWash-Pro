@@ -159,6 +159,14 @@ td strong{color:var(--text);font-weight:500}
 @keyframes sp{to{transform:rotate(360deg)}}
 
 .ref-pill{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--adim);color:var(--amber);border:1px solid #f5a62333}
+.edit-input{background:var(--bg);border:1px solid var(--green);border-radius:4px;color:var(--text);font-family:var(--fm);font-size:12px;padding:4px 8px;width:100%}
+.role-badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.role-admin{background:var(--gdim);color:var(--green);border:1px solid var(--gmid)}
+.role-enc{background:var(--bdim);color:var(--blue)}
+.access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;color:var(--text3);gap:12px}
+.access-denied-icon{font-size:48px}
+.access-denied-text{font-family:var(--fh);font-size:18px;color:var(--text2)}
+.access-denied-sub{font-size:12px}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
@@ -199,19 +207,21 @@ td strong{color:var(--text);font-weight:500}
       <div class="ni" onclick="nav('agenda',this)">◷ Agenda</div>
       <div class="ns">Equipo</div>
       <div class="ni" onclick="nav('empleados',this)">◉ Empleados</div>
-      <div class="ni" onclick="nav('bonos',this)">◆ Bonos</div>
+      <div class="ni admin-only" onclick="nav('bonos',this)">◆ Bonos</div>
       <div class="ns">Comercial</div>
       <div class="ni" onclick="nav('promociones',this)">◈ Promociones</div>
       <div class="ni" onclick="nav('clientes',this)">○ Clientes</div>
-      <div class="ns">Sistema</div>
-      <div class="ni" onclick="nav('admin',this)">⚙ Configuración</div>
+      <div class="ns admin-only">Sistema</div>
+      <div class="ni admin-only" onclick="nav('admin',this)">⚙ Configuración</div>
+      <div class="ns admin-only">Usuarios</div>
+      <div class="ni admin-only" onclick="nav('usuarios',this)">👤 Accesos</div>
     </div>
     <div class="sidebar-footer">
       <div class="user-info">
         <img class="user-avatar" id="user-avatar" src="" alt=""/>
         <span class="user-name" id="user-name">—</span>
       </div>
-      <span class="dot"></span>Conectado<br>
+      <span id="user-rol" class="role-badge role-enc" style="margin-bottom:8px;display:inline-block">Encargado</span><br>
       <button class="btn-logout" onclick="logout()">⊘ Cerrar sesión</button>
     </div>
   </div>
@@ -297,6 +307,15 @@ td strong{color:var(--text);font-weight:500}
       </div>
     </div>
 
+    <!-- USUARIOS -->
+    <div id="page-usuarios" class="page">
+      <div class="ph"><div><div class="pt">Accesos</div><div class="pst">Gestión de usuarios y roles</div></div><button class="btn bp" onclick="openModal('m-usuario')">+ Agregar usuario</button></div>
+      <div class="card">
+        <div class="ch"><div class="ctt">Usuarios con acceso</div></div>
+        <div class="tw"><table><thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Estado</th><th></th></tr></thead><tbody id="users-tb"></tbody></table></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -366,6 +385,12 @@ td strong{color:var(--text);font-weight:500}
   <div class="fa"><button class="btn" onclick="closeModal('m-cargo')">Cancelar</button><button class="btn bp" id="btn-cargo" onclick="guardarCargo()">Guardar</button></div>
 </div></div>
 
+<div class="mo" id="m-usuario"><div class="md2">
+  <div class="mtt">Agregar usuario</div>
+  <div class="fg"><label class="fl">Email de Gmail</label><input class="fi" id="u-email" placeholder="empleado@gmail.com"/></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Nombre</label><input class="fi" id="u-nom" placeholder="Juan Pérez"/></div><div class="fg"><label class="fl">Rol</label><select class="fs" id="u-rol"><option value="encargado">Encargado</option><option value="admin">Admin</option></select></div></div>
+  <div class="fa"><button class="btn" onclick="closeModal('m-usuario')">Cancelar</button><button class="btn bp" id="btn-usr" onclick="guardarUsuario()">Agregar acceso</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -386,7 +411,7 @@ function fmtDate(s){if(!s)return '—';const[y,mo,d]=s.split('-');return `${d}/$
 function todayStr(){return new Date().toISOString().split('T')[0]}
 function weekDay(i){const d=new Date(),day=d.getDay();d.setDate(d.getDate()-(day===0?6:day-1)+i);return d.toISOString().split('T')[0]}
 
-let sb=null,_emps=null,_srvs=null,_cans=null,_cars=null;
+let sb=null,_emps=null,_srvs=null,_cans=null,_cars=null,_rol='encargado';
 
 // ===== AUTH =====
 async function loginGoogle(){
@@ -424,7 +449,12 @@ function nav(page,el){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   if(el)el.classList.add('active');
-  const map={dashboard:renderDashboard,ventas:()=>renderVentas('hoy'),agenda:renderAgenda,empleados:renderEmpleados,bonos:renderBonos,promociones:renderPromociones,clientes:()=>renderClientes(''),admin:renderAdmin};
+  const map={dashboard:renderDashboard,ventas:()=>renderVentas('hoy'),agenda:renderAgenda,empleados:renderEmpleados,bonos:renderBonos,promociones:renderPromociones,clientes:()=>renderClientes(''),admin:renderAdmin,usuarios:renderUsuarios};
+  // Block access for encargado
+  if(_rol!=='admin'&&(page==='bonos'||page==='admin'||page==='usuarios')){
+    document.getElementById('page-'+page).innerHTML=`<div class="access-denied"><div class="access-denied-icon">🔒</div><div class="access-denied-text">Acceso restringido</div><div class="access-denied-sub">Solo el administrador puede ver esta sección.</div></div>`;
+    return;
+  }
   if(map[page])map[page]();
 }
 
@@ -599,18 +629,133 @@ async function renderClientes(q=''){
 }
 
 async function renderAdmin(){
+  if(_rol!=='admin'){
+    ['srv-tb','canal-tb','cargo-tb'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<tr><td colspan="4" style="color:var(--text3);padding:16px">Sin acceso</td></tr>';});
+    return;
+  }
   const[{data:srvs},{data:cans},{data:cars}]=await Promise.all([sb.from('servicios').select('*').order('nombre'),sb.from('canales').select('*').order('nombre'),sb.from('cargos').select('*').order('nombre')]);
-  document.getElementById('srv-tb').innerHTML=(srvs||[]).map(s=>`<tr><td><strong>${s.nombre}</strong></td><td>$${parseFloat(s.precio).toFixed(2)}</td><td>${bdg(s.activo?'g':'r',s.activo?'activo':'inactivo')}</td><td><button class="btn bsm ${s.activo?'bd':'bamb'}" onclick="toggleServicio(${s.id},${s.activo})">${s.activo?'Inactivar':'Activar'}</button></td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--text3);padding:16px">Sin servicios</td></tr>';
-  document.getElementById('canal-tb').innerHTML=(cans||[]).map(c=>`<tr><td><strong>${c.nombre}</strong></td><td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td><td><button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCanal(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button></td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3);padding:16px">Sin canales</td></tr>';
-  document.getElementById('cargo-tb').innerHTML=(cars||[]).map(c=>`<tr><td><strong>${c.nombre}</strong></td><td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td><td><button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCargo(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button></td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3);padding:16px">Sin cargos</td></tr>';
+  document.getElementById('srv-tb').innerHTML=(srvs||[]).map(s=>`<tr>
+    <td id="srv-nom-${s.id}"><strong>${s.nombre}</strong></td>
+    <td id="srv-pre-${s.id}">$${parseFloat(s.precio).toFixed(2)}</td>
+    <td>${bdg(s.activo?'g':'r',s.activo?'activo':'inactivo')}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn bsm" onclick="editServicio(${s.id},'${s.nombre}',${s.precio})">✏ Editar</button>
+      <button class="btn bsm ${s.activo?'bd':'bamb'}" onclick="toggleServicio(${s.id},${s.activo})">${s.activo?'Inactivar':'Activar'}</button>
+    </td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--text3);padding:16px">Sin servicios</td></tr>';
+  document.getElementById('canal-tb').innerHTML=(cans||[]).map(c=>`<tr>
+    <td id="can-nom-${c.id}"><strong>${c.nombre}</strong></td>
+    <td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn bsm" onclick="editCanal(${c.id},'${c.nombre}')">✏ Editar</button>
+      <button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCanal(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button>
+    </td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3);padding:16px">Sin canales</td></tr>';
+  document.getElementById('cargo-tb').innerHTML=(cars||[]).map(c=>`<tr>
+    <td id="car-nom-${c.id}"><strong>${c.nombre}</strong></td>
+    <td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn bsm" onclick="editCargo(${c.id},'${c.nombre}')">✏ Editar</button>
+      <button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCargo(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button>
+    </td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3);padding:16px">Sin cargos</td></tr>';
+}
+
+// Edit inline functions
+function editServicio(id, nom, pre){
+  document.getElementById('srv-nom-'+id).innerHTML=`<input class="edit-input" id="ei-snom-${id}" value="${nom}" style="width:120px"/>`;
+  document.getElementById('srv-pre-'+id).innerHTML=`<input class="edit-input" id="ei-spre-${id}" value="${pre}" type="number" style="width:70px"/>`;
+  // replace edit button with save
+  const btns=document.querySelectorAll(`[onclick="editServicio(${id},'${nom}',${pre})"]`);
+  btns.forEach(b=>{b.textContent='💾 Guardar';b.onclick=()=>saveServicio(id);});
+}
+async function saveServicio(id){
+  const nom=document.getElementById('ei-snom-'+id)?.value.trim();
+  const pre=parseFloat(document.getElementById('ei-spre-'+id)?.value||0);
+  if(!nom){toast('Nombre requerido',true);return;}
+  await sb.from('servicios').update({nombre:nom,precio:pre}).eq('id',id);
+  _srvs=null;toast('Servicio actualizado ✓');renderAdmin();
+}
+
+function editCanal(id, nom){
+  document.getElementById('can-nom-'+id).innerHTML=`<input class="edit-input" id="ei-cnom-${id}" value="${nom}" style="width:140px"/>`;
+  const btns=document.querySelectorAll(`[onclick="editCanal(${id},'${nom}')"]`);
+  btns.forEach(b=>{b.textContent='💾 Guardar';b.onclick=()=>saveCanal(id);});
+}
+async function saveCanal(id){
+  const nom=document.getElementById('ei-cnom-'+id)?.value.trim();
+  if(!nom){toast('Nombre requerido',true);return;}
+  await sb.from('canales').update({nombre:nom}).eq('id',id);
+  _cans=null;toast('Canal actualizado ✓');renderAdmin();
+}
+
+function editCargo(id, nom){
+  document.getElementById('car-nom-'+id).innerHTML=`<input class="edit-input" id="ei-crnom-${id}" value="${nom}" style="width:140px"/>`;
+  const btns=document.querySelectorAll(`[onclick="editCargo(${id},'${nom}')"]`);
+  btns.forEach(b=>{b.textContent='💾 Guardar';b.onclick=()=>saveCargo(id);});
+}
+async function saveCargo(id){
+  const nom=document.getElementById('ei-crnom-'+id)?.value.trim();
+  if(!nom){toast('Nombre requerido',true);return;}
+  await sb.from('cargos').update({nombre:nom}).eq('id',id);
+  _cars=null;toast('Cargo actualizado ✓');renderAdmin();
+}
+
+async function renderUsuarios(){
+  const{data:users}=await sb.from('usuarios').select('*').order('created_at');
+  document.getElementById('users-tb').innerHTML=(users||[]).map(u=>`<tr>
+    <td>${u.email}</td>
+    <td><strong>${u.nombre||'—'}</strong></td>
+    <td><span class="role-badge ${u.rol==='admin'?'role-admin':'role-enc'}">${u.rol}</span></td>
+    <td>${bdg(u.activo?'g':'r',u.activo?'activo':'inactivo')}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn bsm ${u.rol==='admin'?'bamb':'bp'}" onclick="toggleRol(${u.id},'${u.rol}')">${u.rol==='admin'?'→ Encargado':'→ Admin'}</button>
+      <button class="btn bsm ${u.activo?'bd':'bamb'}" onclick="toggleUsuario(${u.id},${u.activo})">${u.activo?'Inactivar':'Activar'}</button>
+    </td></tr>`).join('')||'<tr><td colspan="5" style="color:var(--text3);padding:16px">Sin usuarios registrados</td></tr>';
+}
+
+async function guardarUsuario(){
+  const email=document.getElementById('u-email').value.trim().toLowerCase();
+  if(!email){toast('Ingresa el email',true);return;}
+  setBtn('btn-usr',true);
+  const{error}=await sb.from('usuarios').insert({email,nombre:document.getElementById('u-nom').value.trim(),rol:document.getElementById('u-rol').value,activo:true});
+  setBtn('btn-usr',false);
+  if(error){toast('Error: '+error.message,true);return;}
+  closeModal('m-usuario');toast('Usuario agregado ✓');renderUsuarios();
+}
+
+async function toggleRol(id, rolActual){
+  const nuevoRol=rolActual==='admin'?'encargado':'admin';
+  await sb.from('usuarios').update({rol:nuevoRol}).eq('id',id);
+  toast('Rol actualizado ✓');renderUsuarios();
+}
+
+async function toggleUsuario(id, activo){
+  await sb.from('usuarios').update({activo:!activo}).eq('id',id);
+  toast(activo?'Usuario inactivado':'Usuario activado ✓');renderUsuarios();
 }
 
 // ===== BOOT =====
 window.addEventListener('load', async () => {
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  function showApp(user) {
+  async function showApp(user) {
     setUserUI(user);
+    // Load role from DB
+    const{data:uData}=await sb.from('usuarios').select('rol,activo').eq('email',user.email.toLowerCase()).single();
+    if(!uData||!uData.activo){
+      await sb.auth.signOut();
+      const err=document.getElementById('login-err');
+      err.textContent='Tu cuenta no tiene acceso al sistema. Contacta al administrador.';
+      err.style.display='block';
+      showLogin();
+      return;
+    }
+    _rol=uData.rol;
+    // Show/hide admin nav items
+    document.querySelectorAll('.admin-only').forEach(el=>{
+      el.style.display=_rol==='admin'?'':'none';
+    });
+    // Show role badge in footer
+    const rolBadge=document.getElementById('user-rol');
+    if(rolBadge){rolBadge.textContent=_rol==='admin'?'Admin':'Encargado';rolBadge.className=`role-badge ${_rol==='admin'?'role-admin':'role-enc'}`;}
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     renderDashboard();
