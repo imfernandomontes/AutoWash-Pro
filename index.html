@@ -287,10 +287,23 @@ td strong{color:var(--text);font-weight:500}
 
     <!-- CLIENTES -->
     <div id="page-clientes" class="page">
-      <div class="ph"><div><div class="pt">Clientes</div><div class="pst">Historial y frecuencia</div></div><button class="btn bp" onclick="openModal('m-cliente')">+ Nuevo cliente</button></div>
+      <div class="ph">
+        <div><div class="pt">Clientes</div><div class="pst">Base de clientes registrados</div></div>
+        <button class="btn bp" onclick="openModal('m-cliente')">+ Nuevo cliente</button>
+      </div>
+      <div class="metrics" id="cl-metrics"></div>
       <div class="card">
-        <div class="ch"><div class="ctt">Base de clientes</div><input class="fi" style="width:200px;font-size:12px" placeholder="Buscar..." oninput="renderClientes(this.value)"/></div>
-        <div class="tw"><table><thead><tr><th>Cliente</th><th>Tel.</th><th>Visitas</th><th>Último servicio</th><th>Total gastado</th><th>Referido por</th></tr></thead><tbody id="cl-tb"></tbody></table></div>
+        <div class="ch">
+          <div class="ctt">Base de clientes</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input class="fi" id="cl-search" style="width:220px;font-size:12px" placeholder="Buscar por nombre, ID o placa..." oninput="renderClientes(this.value)"/>
+            <button class="btn bsm" onclick="document.getElementById('cl-search').value='';renderClientes('')">✕</button>
+          </div>
+        </div>
+        <div class="tw"><table>
+          <thead><tr><th>ID</th><th>Cliente</th><th>Tel.</th><th>Email</th><th>Placa</th><th>Visitas</th><th>Total gastado</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="cl-tb"></tbody>
+        </table></div>
       </div>
     </div>
 
@@ -361,10 +374,35 @@ td strong{color:var(--text);font-weight:500}
 </div></div>
 
 <div class="mo" id="m-cliente"><div class="md2">
-  <div class="mtt">Nuevo cliente</div>
-  <div class="fr c2"><div class="fg"><label class="fl">Nombre</label><input class="fi" id="cl-nom" placeholder="Ana Rodríguez"/></div><div class="fg"><label class="fl">Teléfono</label><input class="fi" id="cl-tel" placeholder="+503 7000-0000"/></div></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Vehículo</label><input class="fi" id="cl-veh" placeholder="Toyota Corolla P123-456"/></div><div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="cl-ref"><option value="">Nadie / llegó solo</option></select></div></div>
-  <div class="fa"><button class="btn" onclick="closeModal('m-cliente')">Cancelar</button><button class="btn bp" id="btn-cli" onclick="guardarCliente()">Guardar</button></div>
+  <div class="mtt" id="m-cliente-title">Nuevo cliente</div>
+  <input type="hidden" id="cl-edit-id" value=""/>
+  <div style="background:var(--gdim);border:1px solid var(--gmid);border-radius:var(--r);padding:10px 14px;margin-bottom:16px;font-size:11px;color:var(--green)" id="cl-id-display" style="display:none">
+    ID de cliente: <strong id="cl-id-val">—</strong>
+  </div>
+  <div class="fr c2">
+    <div class="fg"><label class="fl">Nombre completo</label><input class="fi" id="cl-nom" placeholder="Ana Rodríguez"/></div>
+    <div class="fg"><label class="fl">Teléfono</label><input class="fi" id="cl-tel" placeholder="+503 7000-0000"/></div>
+  </div>
+  <div class="fr c2">
+    <div class="fg"><label class="fl">Email</label><input class="fi" id="cl-email" placeholder="cliente@gmail.com" type="email"/></div>
+    <div class="fg"><label class="fl">DUI (opcional)</label><input class="fi" id="cl-dui" placeholder="00000000-0"/></div>
+  </div>
+  <div class="fr c2">
+    <div class="fg">
+      <label class="fl">Placa del vehículo</label>
+      <input class="fi" id="cl-placa" placeholder="P123-456" oninput="this.value=this.value.toUpperCase()"/>
+      <div style="font-size:10px;color:var(--text3);margin-top:4px">Una vez registrada no puede duplicarse</div>
+    </div>
+    <div class="fg"><label class="fl">Vehículo (marca/modelo)</label><input class="fi" id="cl-veh" placeholder="Toyota Corolla blanco"/></div>
+  </div>
+  <div class="fr c2">
+    <div class="fg"><label class="fl">Dirección</label><input class="fi" id="cl-dir" placeholder="Col. Escalón, San Salvador"/></div>
+    <div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="cl-ref"><option value="">Nadie / llegó solo</option></select></div>
+  </div>
+  <div class="fa">
+    <button class="btn" onclick="closeModal('m-cliente')">Cancelar</button>
+    <button class="btn bp" id="btn-cli" onclick="guardarCliente()">Guardar cliente</button>
+  </div>
 </div></div>
 
 <div class="mo" id="m-servicio"><div class="md2">
@@ -477,6 +515,14 @@ async function openModal(id){
   document.querySelectorAll(`#${id} input`).forEach(el=>{if(el.type!=='date')el.value=''});
   const td=todayStr();['c-fec','p-des','p-has'].forEach(x=>{const el=document.getElementById(x);if(el)el.value=td});
   calcTotal();
+  // Reset cliente modal to 'new' mode
+  if(id==='m-cliente'){
+    document.getElementById('m-cliente-title').textContent='Nuevo cliente';
+    document.getElementById('cl-edit-id').value='';
+    document.getElementById('cl-id-display').style.display='none';
+    document.getElementById('btn-cli').textContent='Guardar cliente';
+    document.getElementById('btn-cli').onclick=guardarCliente;
+  }
   document.getElementById(id).classList.add('open');
 }
 
@@ -624,8 +670,101 @@ async function renderPromociones(){
 
 async function renderClientes(q=''){
   const{data:clientes}=await sb.from('clientes').select('*,empleados(nombre)').order('visitas',{ascending:false});
-  let fl=clientes||[];if(q)fl=fl.filter(c=>c.nombre.toLowerCase().includes(q.toLowerCase())||(c.tel||'').includes(q));
-  document.getElementById('cl-tb').innerHTML=fl.map(c=>`<tr><td><strong>${c.nombre}</strong><br><span style="font-size:10px;color:var(--text3)">${c.vehiculo||'—'}</span></td><td style="color:var(--text3)">${c.tel||'—'}</td><td><strong>${c.visitas}</strong></td><td>${c.ultimo_servicio||'—'}</td><td><strong style="color:var(--green)">$${parseFloat(c.gasto_total||0).toFixed(0)}</strong></td><td>${c.empleados?`<span class="ref-pill">${c.empleados.nombre}</span>`:'—'}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">Sin clientes</td></tr>';
+  let fl=clientes||[];
+  if(q){
+    const ql=q.toLowerCase();
+    fl=fl.filter(c=>
+      (c.nombre||'').toLowerCase().includes(ql)||
+      (c.cliente_id||'').toLowerCase().includes(ql)||
+      (c.placa||'').toLowerCase().includes(ql)||
+      (c.tel||'').includes(q)||
+      (c.email||'').toLowerCase().includes(ql)
+    );
+  }
+  // metrics
+  const total=fl.length;
+  const activos=fl.filter(c=>c.activo!==false).length;
+  const gastoTotal=fl.reduce((a,c)=>a+parseFloat(c.gasto_total||0),0);
+  const visitas=fl.reduce((a,c)=>a+parseInt(c.visitas||0),0);
+  const mEl=document.getElementById('cl-metrics');
+  if(mEl) mEl.innerHTML=`
+    <div class="metric"><div class="ml">Total clientes</div><div class="mv">${total}</div><div class="md">${activos} activos</div></div>
+    <div class="metric"><div class="ml">Visitas totales</div><div class="mv">${visitas}</div><div class="md neu">historial</div></div>
+    <div class="metric"><div class="ml">Ingresos totales</div><div class="mv">$${gastoTotal.toFixed(0)}</div><div class="md">acumulado</div></div>
+    <div class="metric"><div class="ml">Ticket promedio</div><div class="mv">$${visitas>0?(gastoTotal/visitas).toFixed(1):'0'}</div><div class="md neu">por visita</div></div>`;
+
+  document.getElementById('cl-tb').innerHTML=fl.map(c=>`<tr>
+    <td><span style="font-family:var(--fh);color:var(--green);font-weight:600">${c.cliente_id||'—'}</span></td>
+    <td>
+      <strong>${c.nombre}</strong>
+      <br><span style="font-size:10px;color:var(--text3)">${c.vehiculo||'—'}</span>
+    </td>
+    <td style="color:var(--text3)">${c.tel||'—'}</td>
+    <td style="color:var(--text3)">${c.email||'—'}</td>
+    <td>
+      ${c.placa?`<span style="font-family:var(--fh);font-size:12px;font-weight:600;background:var(--bg3);padding:2px 8px;border-radius:4px;border:1px solid var(--border2)">${c.placa}</span>`:'—'}
+    </td>
+    <td><strong>${c.visitas||0}</strong></td>
+    <td><strong style="color:var(--green)">$${parseFloat(c.gasto_total||0).toFixed(0)}</strong></td>
+    <td>${bdg(c.activo!==false?'g':'r',c.activo!==false?'activo':'inactivo')}</td>
+    <td style="display:flex;gap:4px">
+      <button class="btn bsm" onclick="editarCliente(${c.id})">✏</button>
+      <button class="btn bsm ${c.activo!==false?'bd':'bamb'}" onclick="toggleCliente(${c.id},${c.activo!==false})">${c.activo!==false?'Inactivar':'Activar'}</button>
+    </td>
+  </tr>`).join('')||'<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text3)">Sin clientes registrados</td></tr>';
+}
+
+async function editarCliente(id){
+  const{data:c}=await sb.from('clientes').select('*').eq('id',id).single();
+  if(!c) return;
+  // populate selects first
+  const emps=await getEmps();
+  const eo=emps.filter(e=>e.activo).map(e=>`<option value="${e.id}">${e.nombre}</option>`).join('');
+  document.getElementById('cl-ref').innerHTML=`<option value="">Nadie / llegó solo</option>`+eo;
+  // fill form
+  document.getElementById('m-cliente-title').textContent='Editar cliente';
+  document.getElementById('cl-edit-id').value=id;
+  document.getElementById('cl-id-display').style.display='block';
+  document.getElementById('cl-id-val').textContent=c.cliente_id||'—';
+  document.getElementById('cl-nom').value=c.nombre||'';
+  document.getElementById('cl-tel').value=c.tel||'';
+  document.getElementById('cl-email').value=c.email||'';
+  document.getElementById('cl-dui').value=c.dui||'';
+  document.getElementById('cl-placa').value=c.placa||'';
+  document.getElementById('cl-veh').value=c.vehiculo||'';
+  document.getElementById('cl-dir').value=c.direccion||'';
+  if(c.referido_por_empleado_id) document.getElementById('cl-ref').value=c.referido_por_empleado_id;
+  document.getElementById('btn-cli').textContent='Actualizar cliente';
+  document.getElementById('btn-cli').onclick=()=>actualizarCliente(id);
+  document.getElementById('m-cliente').classList.add('open');
+}
+
+async function actualizarCliente(id){
+  const nom=document.getElementById('cl-nom').value.trim();
+  if(!nom){toast('Ingresa el nombre',true);return;}
+  const placa=(document.getElementById('cl-placa').value||'').trim().toUpperCase()||null;
+  // check placa duplicate (excluding current)
+  if(placa){
+    const{data:dup}=await sb.from('clientes').select('id').eq('placa',placa).neq('id',id);
+    if(dup&&dup.length>0){toast('Esa placa ya está registrada con otro cliente',true);return;}
+  }
+  setBtn('btn-cli',true);
+  const{error}=await sb.from('clientes').update({
+    nombre:nom, tel:document.getElementById('cl-tel').value,
+    email:document.getElementById('cl-email').value||null,
+    dui:document.getElementById('cl-dui').value||null,
+    placa, vehiculo:document.getElementById('cl-veh').value||null,
+    direccion:document.getElementById('cl-dir').value||null,
+    referido_por_empleado_id:parseInt(document.getElementById('cl-ref').value)||null
+  }).eq('id',id);
+  setBtn('btn-cli',false);
+  if(error){toast('Error: '+error.message,true);return;}
+  closeModal('m-cliente');toast('Cliente actualizado ✓');renderClientes('');
+}
+
+async function toggleCliente(id, activo){
+  await sb.from('clientes').update({activo:!activo}).eq('id',id);
+  toast(activo?'Cliente inactivado':'Cliente activado ✓');renderClientes('');
 }
 
 async function renderAdmin(){
