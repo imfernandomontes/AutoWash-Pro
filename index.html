@@ -167,6 +167,22 @@ td strong{color:var(--text);font-weight:500}
 .access-denied-icon{font-size:48px}
 .access-denied-text{font-family:var(--fh);font-size:18px;color:var(--text2)}
 .access-denied-sub{font-size:12px}
+.cl-search-wrap{position:relative}
+.cl-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);z-index:50;max-height:200px;overflow-y:auto;display:none}
+.cl-dropdown.open{display:block}
+.cl-option{padding:10px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cl-option:last-child{border-bottom:none}
+.cl-option:hover{background:var(--bg3)}
+.cl-option-id{font-size:10px;color:var(--green);font-family:var(--fh);font-weight:600}
+.cl-option-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.cl-new-option{padding:10px 12px;cursor:pointer;font-size:12px;color:var(--green);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.cl-new-option:hover{background:var(--gdim)}
+.pay-btns{display:flex;gap:8px}
+.pay-btn{flex:1;padding:8px;border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--fm);transition:all .15s;text-align:center}
+.pay-btn:hover{border-color:var(--text2)}
+.pay-btn.active{border-color:var(--green);background:var(--gdim);color:var(--green);font-weight:500}
+.pay-btn.active.transfer{border-color:var(--blue);background:var(--bdim);color:var(--blue)}
+.pay-btn.active.card{border-color:var(--purple);background:var(--pdim);color:var(--purple)}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
@@ -335,10 +351,55 @@ td strong{color:var(--text);font-weight:500}
 <!-- MODALS -->
 <div class="mo" id="m-venta"><div class="md2">
   <div class="mtt">Registrar venta</div>
-  <div class="fr c2"><div class="fg"><label class="fl">Cliente</label><input class="fi" id="v-cli" placeholder="Nombre"/></div><div class="fg"><label class="fl">Vehículo / Placa</label><input class="fi" id="v-veh" placeholder="P123-456"/></div></div>
-  <div class="fr c3"><div class="fg"><label class="fl">Servicio</label><select class="fs" id="v-srv" onchange="calcTotal()"></select></div><div class="fg"><label class="fl">Empleado</label><select class="fs" id="v-emp"></select></div><div class="fg"><label class="fl">Promoción</label><select class="fs" id="v-pro" onchange="calcTotal()"><option value="0|none|0">Sin promoción</option></select></div></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="v-ref"><option value="">No aplica</option></select></div><div class="fg"><label class="fl">Total a cobrar</label><div style="font-family:var(--fh);font-size:24px;font-weight:700;color:var(--green);padding:6px 0" id="v-total">$0.00</div></div></div>
-  <div class="fa"><button class="btn" onclick="closeModal('m-venta')">Cancelar</button><button class="btn bp" id="btn-venta" onclick="guardarVenta()">Registrar venta</button></div>
+
+  <!-- Cliente search -->
+  <div class="fg">
+    <label class="fl">Cliente</label>
+    <div class="cl-search-wrap">
+      <input class="fi" id="v-cli" placeholder="Buscar por nombre, ID AW-0001 o placa..." autocomplete="off"
+        oninput="buscarClienteVenta(this.value)" onfocus="buscarClienteVenta(this.value)"/>
+      <div class="cl-dropdown" id="v-cli-drop"></div>
+    </div>
+    <input type="hidden" id="v-cli-id" value=""/>
+    <div id="v-cli-selected" style="display:none;margin-top:8px;padding:8px 12px;background:var(--gdim);border:1px solid var(--gmid);border-radius:var(--r);font-size:12px;display:none;align-items:center;justify-content:space-between">
+      <div>
+        <span style="color:var(--green);font-weight:600" id="v-cli-sel-id"></span>
+        <span style="color:var(--text);margin-left:8px" id="v-cli-sel-nom"></span>
+        <span style="color:var(--text3);font-size:10px;margin-left:6px" id="v-cli-sel-placa"></span>
+      </div>
+      <button class="btn bsm" onclick="limpiarClienteVenta()" style="padding:3px 8px">✕</button>
+    </div>
+  </div>
+
+  <div class="fr c3">
+    <div class="fg"><label class="fl">Servicio</label><select class="fs" id="v-srv" onchange="calcTotal()"></select></div>
+    <div class="fg"><label class="fl">Empleado</label><select class="fs" id="v-emp"></select></div>
+    <div class="fg"><label class="fl">Promoción</label><select class="fs" id="v-pro" onchange="calcTotal()"><option value="0|none|0">Sin promoción</option></select></div>
+  </div>
+
+  <div class="fr c2">
+    <div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="v-ref"><option value="">No aplica</option></select></div>
+    <div class="fg">
+      <label class="fl">Total a cobrar</label>
+      <div style="font-family:var(--fh);font-size:24px;font-weight:700;color:var(--green);padding:6px 0" id="v-total">$0.00</div>
+    </div>
+  </div>
+
+  <!-- Método de pago -->
+  <div class="fg">
+    <label class="fl">Método de pago</label>
+    <div class="pay-btns">
+      <button class="pay-btn active" id="pay-efectivo" onclick="selPago('efectivo')">💵 Efectivo</button>
+      <button class="pay-btn transfer" id="pay-transferencia" onclick="selPago('transferencia')">📱 Transferencia</button>
+      <button class="pay-btn card" id="pay-tarjeta" onclick="selPago('tarjeta')">💳 Tarjeta</button>
+    </div>
+    <input type="hidden" id="v-pago" value="efectivo"/>
+  </div>
+
+  <div class="fa">
+    <button class="btn" onclick="closeModal('m-venta')">Cancelar</button>
+    <button class="btn bp" id="btn-venta" onclick="guardarVenta()">Registrar venta</button>
+  </div>
 </div></div>
 
 <div class="mo" id="m-cita"><div class="md2">
@@ -515,6 +576,11 @@ async function openModal(id){
   document.querySelectorAll(`#${id} input`).forEach(el=>{if(el.type!=='date')el.value=''});
   const td=todayStr();['c-fec','p-des','p-has'].forEach(x=>{const el=document.getElementById(x);if(el)el.value=td});
   calcTotal();
+  // Reset venta modal
+  if(id==='m-venta'){
+    limpiarClienteVenta();
+    selPago('efectivo');
+  }
   // Reset cliente modal to 'new' mode
   if(id==='m-cliente'){
     document.getElementById('m-cliente-title').textContent='Nuevo cliente';
@@ -627,8 +693,29 @@ async function renderVentas(periodo='hoy'){
   const[{data:ventas},emps,{data:promos}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',from+'T00:00:00').order('created_at',{ascending:false}),getEmps(),sb.from('promociones').select('id,nombre')]);
   const em=Object.fromEntries(emps.map((e,i)=>[e.id,{...e,idx:e.color_idx??i}]));const pm=Object.fromEntries((promos||[]).map(p=>[p.id,p]));
   const ing=(ventas||[]).reduce((a,v)=>a+parseFloat(v.precio),0);
-  document.getElementById('v-metrics').innerHTML=`<div class="metric"><div class="ml">Ingresos</div><div class="mv">$${ing.toFixed(0)}</div><div class="md">período</div></div><div class="metric"><div class="ml">Servicios</div><div class="mv">${(ventas||[]).length}</div><div class="md neu">registrados</div></div><div class="metric"><div class="ml">Ticket promedio</div><div class="mv">$${(ventas||[]).length?(ing/(ventas||[]).length).toFixed(1):'0'}</div><div class="md neu">por servicio</div></div><div class="metric"><div class="ml">Pendientes</div><div class="mv">${(ventas||[]).filter(v=>v.estado==='pendiente').length}</div><div class="md ${(ventas||[]).filter(v=>v.estado==='pendiente').length>0?'neg':''}">por cobrar</div></div>`;
-  document.getElementById('v-tbody').innerHTML=(ventas||[]).map(v=>{const emp=em[v.empleado_id]||{nombre:'—',idx:0};const pro=v.promo_id?pm[v.promo_id]:null;return `<tr><td>${fmtTime(v.created_at)}</td><td><strong>${v.cliente_nombre}</strong></td><td style="color:var(--text3)">${v.vehiculo||'—'}</td><td>${v.servicio}</td><td><span style="color:${ec(emp.idx||0)}">${emp.nombre}</span></td><td>${pro?`<span class="ref-pill">${pro.nombre}</span>`:'—'}</td><td><strong style="color:var(--green)">$${parseFloat(v.precio).toFixed(2)}</strong></td><td>${bdg(v.estado==='pagado'?'g':'a',v.estado)}</td><td>${v.estado==='pendiente'?`<button class="btn bsm bp" onclick="cobrar(${v.id})">Cobrar</button>`:''}</td></tr>`;}).join('')||'<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text3)">Sin ventas en este período</td></tr>';
+  const ef=(ventas||[]).filter(v=>(v.metodo_pago||'efectivo')==='efectivo').reduce((a,v)=>a+parseFloat(v.precio),0);
+  const tr2=(ventas||[]).filter(v=>v.metodo_pago==='transferencia').reduce((a,v)=>a+parseFloat(v.precio),0);
+  const tc=(ventas||[]).filter(v=>v.metodo_pago==='tarjeta').reduce((a,v)=>a+parseFloat(v.precio),0);
+  document.getElementById('v-metrics').innerHTML=`
+    <div class="metric"><div class="ml">Ingresos totales</div><div class="mv">$${ing.toFixed(0)}</div><div class="md">${(ventas||[]).length} servicios</div></div>
+    <div class="metric"><div class="ml">💵 Efectivo</div><div class="mv">$${ef.toFixed(0)}</div><div class="md neu">${(ventas||[]).filter(v=>(v.metodo_pago||'efectivo')==='efectivo').length} pagos</div></div>
+    <div class="metric"><div class="ml">📱 Transferencia</div><div class="mv">$${tr2.toFixed(0)}</div><div class="md neu">${(ventas||[]).filter(v=>v.metodo_pago==='transferencia').length} pagos</div></div>
+    <div class="metric"><div class="ml">💳 Tarjeta</div><div class="mv">$${tc.toFixed(0)}</div><div class="md neu">${(ventas||[]).filter(v=>v.metodo_pago==='tarjeta').length} pagos</div></div>`;
+  const pagoIcon={efectivo:'💵',transferencia:'📱',tarjeta:'💳'};
+  document.getElementById('v-tbody').innerHTML=(ventas||[]).map(v=>{
+    const emp=em[v.empleado_id]||{nombre:'—',idx:0};
+    const pro=v.promo_id?pm[v.promo_id]:null;
+    return `<tr>
+      <td>${fmtTime(v.created_at)}</td>
+      <td><strong>${v.cliente_nombre}</strong></td>
+      <td style="color:var(--text3)">${v.vehiculo||'—'}</td>
+      <td>${v.servicio}</td>
+      <td><span style="color:${ec(emp.idx||0)}">${emp.nombre}</span></td>
+      <td>${pro?`<span class="ref-pill">${pro.nombre}</span>`:'—'}</td>
+      <td><span title="${v.metodo_pago||'efectivo'}">${pagoIcon[v.metodo_pago||'efectivo']||'💵'}</span> <strong style="color:var(--green)">$${parseFloat(v.precio).toFixed(2)}</strong></td>
+      <td>${bdg(v.estado==='pagado'?'g':'a',v.estado)}</td>
+      <td>${v.estado==='pendiente'?`<button class="btn bsm bp" onclick="cobrar(${v.id})">Cobrar</button>`:''}</td>
+    </tr>`;}).join('')||'<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text3)">Sin ventas en este período</td></tr>';
 }
 
 async function renderAgenda(){
