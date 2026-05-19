@@ -7,7 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#0f0f0f;--bg2:#181818;--bg3:#222;--border:#2e2e2e;--border2:#3a3a3a;--text:#f0f0f0;--text2:#888;--text3:#555;--green:#00e87a;--gdim:#00e87a22;--gmid:#00e87a55;--amber:#f5a623;--adim:#f5a62322;--blue:#4a9eff;--bdim:#4a9eff22;--red:#ff4d4d;--rdim:#ff4d4d22;--purple:#b47cff;--pdim:#b47cff22;--fh:'Syne',sans-serif;--fm:'DM Mono',monospace;--r:8px}
+:root {
+  --bg:#0f0f0f; --bg2:#181818; --bg3:#222; --border:#2e2e2e; --border2:#3a3a3a;
+  --text:#f0f0f0; --text2:#888; --text3:#555;
+  --green:#00e87a; --gdim:#00e87a22; --gmid:#00e87a55;
+  --amber:#f5a623; --adim:#f5a62322;
+  --blue:#4a9eff; --bdim:#4a9eff22;
+  --red:#ff4d4d; --rdim:#ff4d4d22;
+  --purple:#b47cff; --pdim:#b47cff22;
+  --fh:'Syne',sans-serif; --fm:'DM Mono',monospace; --r:8px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fm);font-size:13px}
 
@@ -17,12 +26,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .login-logo{font-family:var(--fh);font-size:28px;font-weight:700;color:var(--green);margin-bottom:8px}
 .login-sub{font-size:12px;color:var(--text3);margin-bottom:32px;line-height:1.6}
 .btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 20px;background:#fff;color:#333;border:none;border-radius:var(--r);cursor:pointer;font-size:14px;font-weight:500;transition:all .15s}
-.btn-google:hover{background:#f1f1f1;transform:translateY(-1px)}
+.btn-google:hover{background:#f1f1f1}
 .btn-google svg{width:20px;height:20px;flex-shrink:0}
 .login-note{font-size:11px;color:var(--text3);margin-top:20px}
 .login-err{color:var(--red);font-size:12px;margin-top:14px;display:none}
 
-/* APP */
+/* LAYOUT */
 .app{display:flex;height:100vh;overflow:hidden}
 .sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
 .logo{padding:20px 18px 18px;border-bottom:1px solid var(--border)}
@@ -33,13 +42,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .ni{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;color:var(--text2);font-size:12px;transition:all .15s;border-left:2px solid transparent}
 .ni:hover{color:var(--text);background:var(--bg3)}
 .ni.active{color:var(--green);border-left-color:var(--green);background:var(--gdim)}
-.sidebar-footer{padding:14px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
-.user-info{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--gdim);border:1px solid var(--gmid)}
-.user-name{font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px}
-.btn-logout{display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text3);font-size:11px;background:none;border:none;padding:0;font-family:var(--fm)}
-.btn-logout:hover{color:var(--red)}
+.sidebar-foot{padding:14px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.user-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.user-av{width:28px;height:28px;border-radius:50%;background:var(--gdim);border:1px solid var(--gmid)}
+.user-nm{font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.role-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.rp-admin{background:var(--gdim);color:var(--green);border:1px solid var(--gmid)}
+.rp-enc{background:var(--bdim);color:var(--blue)}
+.btn-out{display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text3);font-size:11px;background:none;border:none;padding:0;font-family:var(--fm);margin-top:6px}
+.btn-out:hover{color:var(--red)}
 
 /* MAIN */
 .main{flex:1;overflow-y:auto}
@@ -67,14 +78,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .ml{font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
 .mv{font-family:var(--fh);font-size:26px;font-weight:700}
 .md{font-size:11px;color:var(--green);margin-top:4px}
-.md.neg{color:var(--red)}.md.neu{color:var(--text2)}
+.md.neu{color:var(--text2)} .md.neg{color:var(--red)}
 
 /* CARDS */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
 .ctt{font-family:var(--fh);font-size:14px;font-weight:600}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
 /* TABLES */
 .tw{overflow-x:auto}
@@ -84,14 +94,15 @@ td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg3);color:var(--text)}
 td strong{color:var(--text);font-weight:500}
+.empty-row{text-align:center;padding:28px;color:var(--text3)}
 
 /* BADGES */
 .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;font-weight:500}
-.bgg{background:var(--gdim);color:var(--green);border:1px solid var(--gmid)}
-.bga{background:var(--adim);color:var(--amber)}
-.bgb{background:var(--bdim);color:var(--blue)}
-.bgr{background:var(--rdim);color:var(--red)}
-.bggr{background:var(--bg3);color:var(--text2)}
+.bg{background:var(--gdim);color:var(--green);border:1px solid var(--gmid)}
+.ba{background:var(--adim);color:var(--amber)}
+.bb{background:var(--bdim);color:var(--blue)}
+.br{background:var(--rdim);color:var(--red)}
+.bgr{background:var(--bg3);color:var(--text2)}
 
 /* FORMS */
 .fg{margin-bottom:14px}
@@ -104,16 +115,39 @@ td strong{color:var(--text);font-weight:500}
 .fr.c3{grid-template-columns:1fr 1fr 1fr}
 .fa{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
 
+/* CLIENT SEARCH */
+.cs-wrap{position:relative}
+.cs-drop{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);z-index:50;max-height:200px;overflow-y:auto;display:none;margin-top:2px}
+.cs-drop.open{display:block}
+.cs-opt{padding:10px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cs-opt:last-child{border-bottom:none}
+.cs-opt:hover{background:var(--bg3)}
+.cs-opt-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.cs-opt-id{font-size:10px;color:var(--green);font-family:var(--fh);font-weight:600}
+.cs-new{padding:10px 12px;cursor:pointer;font-size:12px;color:var(--green);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.cs-new:hover{background:var(--gdim)}
+.cs-tag{display:none;margin-top:8px;padding:8px 12px;background:var(--gdim);border:1px solid var(--gmid);border-radius:var(--r);font-size:12px;align-items:center;justify-content:space-between}
+.cs-tag.show{display:flex}
+
+/* PAYMENT BUTTONS */
+.pay-wrap{display:flex;gap:8px}
+.pay-btn{flex:1;padding:8px;border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--fm);transition:all .15s;text-align:center}
+.pay-btn:hover{border-color:var(--text2)}
+.pay-ef{border-color:var(--green);background:var(--gdim);color:var(--green);font-weight:500}
+.pay-tr{border-color:var(--blue);background:var(--bdim);color:var(--blue);font-weight:500}
+.pay-tc{border-color:var(--purple);background:var(--pdim);color:var(--purple);font-weight:500}
+
 /* AGENDA */
-.aw{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.dh{text-align:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:8px}
-.dh.today{color:var(--green)}
-.slot{padding:7px 8px;border-radius:6px;margin-bottom:5px;font-size:10px;line-height:1.4;border:1px solid transparent}
-.sf3{background:var(--bg3);color:var(--text3);border-color:var(--border);text-align:center}
-.sc0{background:#00e87a15;color:var(--green);border-color:#00e87a33}
-.sc1{background:#4a9eff15;color:var(--blue);border-color:#4a9eff33}
-.sc2{background:#f5a62315;color:var(--amber);border-color:#f5a62333}
-.sc3{background:#b47cff15;color:var(--purple);border-color:#b47cff33}
+.ag-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.ag-hd{text-align:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:8px 0;border-bottom:1px solid var(--border);margin-bottom:8px}
+.ag-hd.today{color:var(--green)}
+.ag-slot{padding:7px 8px;border-radius:6px;margin-bottom:5px;font-size:10px;line-height:1.4;border:1px solid transparent;cursor:pointer}
+.ag-slot:hover{opacity:.8}
+.ag-free{background:var(--bg3);color:var(--text3);border-color:var(--border);text-align:center}
+.ag-c0{background:#00e87a15;color:var(--green);border-color:#00e87a33}
+.ag-c1{background:#4a9eff15;color:var(--blue);border-color:#4a9eff33}
+.ag-c2{background:#f5a62315;color:var(--amber);border-color:#f5a62333}
+.ag-c3{background:#b47cff15;color:var(--purple);border-color:#b47cff33}
 
 /* EMPLOYEE */
 .er{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
@@ -124,81 +158,40 @@ td strong{color:var(--text);font-weight:500}
 .em2{font-size:11px;color:var(--text3);margin-top:2px}
 .pb{height:3px;background:var(--bg3);border-radius:99px;overflow:hidden;margin-top:4px}
 .pf{height:100%;border-radius:99px;background:var(--green)}
-.ebo{text-align:right;flex-shrink:0}
-.bamt{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--green)}
-.blbl{font-size:10px;color:var(--text3);margin-top:2px}
+.bono-box{text-align:right;flex-shrink:0}
+.bono-amt{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--green)}
+.bono-lbl{font-size:10px;color:var(--text3);margin-top:2px}
 
 /* PROMO */
-.pi{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px}
-.piico{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.pinf{flex:1}
-.pnm{color:var(--text);font-weight:500;font-family:var(--fh);font-size:13px}
-.pdt{font-size:11px;color:var(--text3);margin-top:3px}
+.promo-card{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px}
+.promo-ico{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.promo-info{flex:1}
+.promo-nm{color:var(--text);font-weight:500;font-family:var(--fh);font-size:13px}
+.promo-dt{font-size:11px;color:var(--text3);margin-top:3px}
 
 /* BAR CHART */
-.bc{display:flex;align-items:flex-end;gap:5px;height:70px;margin-top:8px}
-.bw{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.bb2{width:100%;border-radius:3px 3px 0 0;background:var(--bg3);border:1px solid var(--border)}
-.bb2.hi{background:var(--gdim);border-color:var(--gmid)}
-.bday{font-size:9px;color:var(--text3)}
+.bar-chart{display:flex;align-items:flex-end;gap:5px;height:70px;margin-top:8px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-col{width:100%;border-radius:3px 3px 0 0;background:var(--bg3);border:1px solid var(--border)}
+.bar-col.hi{background:var(--gdim);border-color:var(--gmid)}
+.bar-lbl{font-size:9px;color:var(--text3)}
 
 /* MODAL */
 .mo{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:100}
 .mo.open{display:flex}
-.md2{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:24px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;animation:fu .2s ease}
+.mo-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:24px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;animation:fu .2s ease}
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.mtt{font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:20px}
+.mo-title{font-family:var(--fh);font-size:16px;font-weight:700;margin-bottom:20px}
 
-/* TOAST */
+/* MISC */
 .toast{position:fixed;bottom:24px;right:24px;font-weight:500;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:200;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
-
-/* LOADING */
-.loading{display:flex;align-items:center;gap:8px;color:var(--text3);font-size:12px;padding:20px 0}
+.spin-wrap{display:flex;align-items:center;gap:8px;color:var(--text3);font-size:12px;padding:20px 0}
 .spin{width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--green);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-
 .ref-pill{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--adim);color:var(--amber);border:1px solid #f5a62333}
-.edit-input{background:var(--bg);border:1px solid var(--green);border-radius:4px;color:var(--text);font-family:var(--fm);font-size:12px;padding:4px 8px;width:100%}
-.role-badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
-.role-admin{background:var(--gdim);color:var(--green);border:1px solid var(--gmid)}
-.role-enc{background:var(--bdim);color:var(--blue)}
-.access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;color:var(--text3);gap:12px}
-.access-denied-icon{font-size:48px}
-.access-denied-text{font-family:var(--fh);font-size:18px;color:var(--text2)}
-.access-denied-sub{font-size:12px}
-.cl-search-wrap{position:relative}
-.cl-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);z-index:50;max-height:200px;overflow-y:auto;display:none}
-.cl-dropdown.open{display:block}
-.cl-option{padding:10px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.cl-option:last-child{border-bottom:none}
-.cl-option:hover{background:var(--bg3)}
-.cl-option-id{font-size:10px;color:var(--green);font-family:var(--fh);font-weight:600}
-.cl-option-sub{font-size:10px;color:var(--text3);margin-top:2px}
-.cl-new-opt{padding:10px 12px;cursor:pointer;font-size:12px;color:var(--green);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.cl-new-opt:hover{background:var(--gdim)}
-.pay-btns{display:flex;gap:8px}
-.pay-btn{flex:1;padding:8px;border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--fm);transition:all .15s;text-align:center}
-.pay-btn:hover{border-color:var(--text2)}
-.pay-btn.sel{border-color:var(--green);background:var(--gdim);color:var(--green);font-weight:500}
-.pay-btn.sel.tr{border-color:var(--blue);background:var(--bdim);color:var(--blue)}
-.pay-btn.sel.tc{border-color:var(--purple);background:var(--pdim);color:var(--purple)}
-.cl-search-wrap{position:relative}
-.cl-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);z-index:50;max-height:200px;overflow-y:auto;display:none}
-.cl-dropdown.open{display:block}
-.cl-option{padding:10px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.cl-option:last-child{border-bottom:none}
-.cl-option:hover{background:var(--bg3)}
-.cl-option-id{font-size:10px;color:var(--green);font-family:var(--fh);font-weight:600}
-.cl-option-sub{font-size:10px;color:var(--text3);margin-top:2px}
-.cl-new-option{padding:10px 12px;cursor:pointer;font-size:12px;color:var(--green);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.cl-new-option:hover{background:var(--gdim)}
-.pay-btns{display:flex;gap:8px}
-.pay-btn{flex:1;padding:8px;border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--fm);transition:all .15s;text-align:center}
-.pay-btn:hover{border-color:var(--text2)}
-.pay-btn.active{border-color:var(--green);background:var(--gdim);color:var(--green);font-weight:500}
-.pay-btn.active.transfer{border-color:var(--blue);background:var(--bdim);color:var(--blue)}
-.pay-btn.active.card{border-color:var(--purple);background:var(--pdim);color:var(--purple)}
+.edit-fi{background:var(--bg);border:1px solid var(--green);border-radius:4px;color:var(--text);font-family:var(--fm);font-size:12px;padding:4px 8px}
+.access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;color:var(--text3);gap:12px;text-align:center}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
@@ -212,12 +205,7 @@ td strong{color:var(--text);font-weight:500}
     <div class="login-logo">AutoWash Pro</div>
     <div class="login-sub">Sistema de gestión para tu negocio.<br>Inicia sesión con tu cuenta de Google.</div>
     <button class="btn-google" onclick="loginGoogle()">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
+      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       Continuar con Google
     </button>
     <div class="login-note">Solo usuarios autorizados pueden acceder.</div>
@@ -228,33 +216,26 @@ td strong{color:var(--text);font-weight:500}
 <!-- APP -->
 <div class="app" id="app" style="display:none">
   <div class="sidebar">
-    <div class="logo">
-      <div class="logo-name">AutoWash Pro</div>
-      <div class="logo-sub">Sistema de Gestión</div>
-    </div>
+    <div class="logo"><div class="logo-name">AutoWash Pro</div><div class="logo-sub">Sistema de Gestión</div></div>
     <div class="nav">
       <div class="ns">Principal</div>
       <div class="ni active" onclick="nav('dashboard',this)">▣ Dashboard</div>
       <div class="ni" onclick="nav('ventas',this)">◎ Ventas</div>
       <div class="ni" onclick="nav('agenda',this)">◷ Agenda</div>
-      <div class="ns">Equipo</div>
-      <div class="ni" onclick="nav('empleados',this)">◉ Empleados</div>
+      <div class="ns admin-only">Equipo</div>
+      <div class="ni admin-only" onclick="nav('empleados',this)">◉ Empleados</div>
       <div class="ni admin-only" onclick="nav('bonos',this)">◆ Bonos</div>
       <div class="ns">Comercial</div>
       <div class="ni" onclick="nav('promociones',this)">◈ Promociones</div>
       <div class="ni" onclick="nav('clientes',this)">○ Clientes</div>
       <div class="ns admin-only">Sistema</div>
       <div class="ni admin-only" onclick="nav('admin',this)">⚙ Configuración</div>
-      <div class="ns admin-only">Usuarios</div>
       <div class="ni admin-only" onclick="nav('usuarios',this)">👤 Accesos</div>
     </div>
-    <div class="sidebar-footer">
-      <div class="user-info">
-        <img class="user-avatar" id="user-avatar" src="" alt=""/>
-        <span class="user-name" id="user-name">—</span>
-      </div>
-      <span id="user-rol" class="role-badge role-enc" style="margin-bottom:8px;display:inline-block">Encargado</span><br>
-      <button class="btn-logout" onclick="logout()">⊘ Cerrar sesión</button>
+    <div class="sidebar-foot">
+      <div class="user-row"><img class="user-av" id="user-av" src="" alt="" style="display:none"/><span class="user-nm" id="user-nm">—</span></div>
+      <span id="user-rol" class="role-pill rp-enc" style="margin-bottom:6px;display:inline-block">Encargado</span>
+      <button class="btn-out" onclick="logout()">⊘ Cerrar sesión</button>
     </div>
   </div>
 
@@ -263,12 +244,12 @@ td strong{color:var(--text);font-weight:500}
     <!-- DASHBOARD -->
     <div id="page-dashboard" class="page active">
       <div class="ph"><div><div class="pt">Dashboard</div><div class="pst" id="dash-fecha"></div></div><button class="btn bp bsm" onclick="openModal('m-venta')">+ Registrar venta</button></div>
-      <div class="metrics" id="dash-metrics"><div class="loading"><div class="spin"></div>Cargando...</div></div>
+      <div class="metrics" id="dash-metrics"><div class="spin-wrap"><div class="spin"></div>Cargando...</div></div>
       <div class="g2">
-        <div class="card"><div class="ch"><div class="ctt">Ventas esta semana</div></div><div class="bc" id="dash-chart"></div></div>
-        <div class="card"><div class="ch"><div class="ctt">Próximas citas hoy</div></div><div id="dash-citas"><div class="loading"><div class="spin"></div></div></div></div>
+        <div class="card"><div class="ch"><div class="ctt">Ventas esta semana</div></div><div class="bar-chart" id="dash-chart"></div></div>
+        <div class="card"><div class="ch"><div class="ctt">Próximas citas hoy</div></div><div id="dash-citas"></div></div>
       </div>
-      <div class="card"><div class="ch"><div class="ctt">Últimas ventas</div></div><div class="tw"><table><thead><tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th>Empleado</th><th>Total</th><th>Estado</th></tr></thead><tbody id="dash-vtb"></tbody></table></div></div>
+      <div class="card"><div class="ch"><div class="ctt">Últimas ventas</div></div><div class="tw"><table><thead><tr><th>Hora</th><th>Cliente</th><th>Servicio</th><th>Empleado</th><th>Pago</th><th>Total</th><th>Estado</th></tr></thead><tbody id="dash-vtb"></tbody></table></div></div>
     </div>
 
     <!-- VENTAS -->
@@ -285,7 +266,7 @@ td strong{color:var(--text);font-weight:500}
     <div id="page-agenda" class="page">
       <div class="ph"><div><div class="pt">Agenda</div><div class="pst">Citas y reservaciones</div></div><button class="btn bp" onclick="openModal('m-cita')">+ Nueva cita</button></div>
       <div class="card" style="margin-bottom:16px"><div class="ch" style="margin-bottom:0;padding-bottom:0;border:none"><div class="ctt">Semana actual</div><div id="ag-leg" style="display:flex;gap:8px;flex-wrap:wrap"></div></div></div>
-      <div class="card"><div class="aw" id="ag-week"></div></div>
+      <div class="card"><div class="ag-grid" id="ag-week"></div></div>
       <div class="card"><div class="ch"><div class="ctt">Todas las citas</div></div><div class="tw"><table><thead><tr><th>Fecha</th><th>Hora</th><th>Cliente</th><th>Servicio</th><th>Empleado</th><th>Canal</th><th>Estado</th><th></th></tr></thead><tbody id="citas-tb"></tbody></table></div></div>
     </div>
 
@@ -319,23 +300,11 @@ td strong{color:var(--text);font-weight:500}
 
     <!-- CLIENTES -->
     <div id="page-clientes" class="page">
-      <div class="ph">
-        <div><div class="pt">Clientes</div><div class="pst">Base de clientes registrados</div></div>
-        <button class="btn bp" onclick="openModal('m-cliente')">+ Nuevo cliente</button>
-      </div>
+      <div class="ph"><div><div class="pt">Clientes</div><div class="pst">Base de clientes registrados</div></div><button class="btn bp" onclick="openModal('m-cliente')">+ Nuevo cliente</button></div>
       <div class="metrics" id="cl-metrics"></div>
       <div class="card">
-        <div class="ch">
-          <div class="ctt">Base de clientes</div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input class="fi" id="cl-search" style="width:220px;font-size:12px" placeholder="Buscar por nombre, ID o placa..." oninput="renderClientes(this.value)"/>
-            <button class="btn bsm" onclick="document.getElementById('cl-search').value='';renderClientes('')">✕</button>
-          </div>
-        </div>
-        <div class="tw"><table>
-          <thead><tr><th>ID</th><th>Cliente</th><th>Tel.</th><th>Email</th><th>Placa</th><th>Visitas</th><th>Total gastado</th><th>Estado</th><th></th></tr></thead>
-          <tbody id="cl-tb"></tbody>
-        </table></div>
+        <div class="ch"><div class="ctt">Base de clientes</div><input class="fi" id="cl-search" style="width:240px;font-size:12px" placeholder="Buscar por nombre, ID o placa..." oninput="renderClientes(this.value)"/></div>
+        <div class="tw"><table><thead><tr><th>ID</th><th>Cliente</th><th>Tel.</th><th>Email</th><th>Placa</th><th>Visitas</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody id="cl-tb"></tbody></table></div>
       </div>
     </div>
 
@@ -348,743 +317,752 @@ td strong{color:var(--text);font-weight:500}
       </div>
       <div class="g2">
         <div class="card"><div class="ch"><div class="ctt">Cargos de empleados</div><button class="btn bsm bp" onclick="openModal('m-cargo')">+ Agregar</button></div><div class="tw"><table><thead><tr><th>Cargo</th><th>Estado</th><th></th></tr></thead><tbody id="cargo-tb"></tbody></table></div></div>
-        <div class="card"><div class="ch"><div class="ctt">Tipos de descuento</div></div><div class="tw"><table><thead><tr><th>Tipo</th><th>Descripción</th><th>Estado</th></tr></thead><tbody><tr><td><strong>%</strong></td><td>Porcentaje sobre el total</td><td><span class="badge bgg">activo</span></td></tr><tr><td><strong>$</strong></td><td>Monto fijo de descuento</td><td><span class="badge bgg">activo</span></td></tr><tr><td><strong>2×1</strong></td><td>Paga uno lleva dos</td><td><span class="badge bgg">activo</span></td></tr></tbody></table></div></div>
+        <div class="card"><div class="ch"><div class="ctt">Tipos de descuento</div></div><div class="tw"><table><thead><tr><th>Tipo</th><th>Descripción</th><th>Estado</th></tr></thead><tbody><tr><td><strong>%</strong></td><td>Porcentaje sobre el total</td><td><span class="badge bg">activo</span></td></tr><tr><td><strong>$</strong></td><td>Monto fijo de descuento</td><td><span class="badge bg">activo</span></td></tr><tr><td><strong>2×1</strong></td><td>Paga uno lleva dos</td><td><span class="badge bg">activo</span></td></tr></tbody></table></div></div>
       </div>
     </div>
 
     <!-- USUARIOS -->
     <div id="page-usuarios" class="page">
       <div class="ph"><div><div class="pt">Accesos</div><div class="pst">Gestión de usuarios y roles</div></div><button class="btn bp" onclick="openModal('m-usuario')">+ Agregar usuario</button></div>
-      <div class="card">
-        <div class="ch"><div class="ctt">Usuarios con acceso</div></div>
-        <div class="tw"><table><thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Estado</th><th></th></tr></thead><tbody id="users-tb"></tbody></table></div>
-      </div>
+      <div class="card"><div class="ch"><div class="ctt">Usuarios con acceso</div></div><div class="tw"><table><thead><tr><th>Email</th><th>Nombre</th><th>Rol</th><th>Estado</th><th></th></tr></thead><tbody id="users-tb"></tbody></table></div></div>
     </div>
 
   </div>
 </div>
 
-<!-- MODALS -->
-<div class="mo" id="m-venta"><div class="md2">
-  <div class="mtt">Registrar venta</div>
+<!-- ══ MODALS ══ -->
 
-  <!-- Cliente search -->
+<!-- VENTA - IDs: vta-cli-input, vta-cli-drop, vta-cli-fk, vta-cli-tag, vta-cli-tag-id, vta-cli-tag-nom -->
+<!-- PAGO - IDs: vta-pago (hidden), vta-pay-ef, vta-pay-tr, vta-pay-tc -->
+<!-- SERVICIO - IDs: vta-srv, vta-emp, vta-pro, vta-ref, vta-total -->
+<div class="mo" id="m-venta"><div class="mo-box">
+  <div class="mo-title">Registrar venta</div>
   <div class="fg">
     <label class="fl">Cliente</label>
-    <div class="cl-search-wrap">
-      <input class="fi" id="v-cli" placeholder="Buscar por nombre, ID AW-0001 o placa..." autocomplete="off"
-        oninput="buscarClienteVenta(this.value)" onfocus="buscarClienteVenta(this.value)"/>
-      <div class="cl-dropdown" id="v-cli-drop"></div>
+    <div class="cs-wrap">
+      <input class="fi" id="vta-cli-input" placeholder="Buscar por nombre, ID AW-0001 o placa..." autocomplete="off"
+        oninput="csSearch(this.value,'vta-cli-drop','vta-cli')"
+        onfocus="csSearch(this.value,'vta-cli-drop','vta-cli')"/>
+      <div class="cs-drop" id="vta-cli-drop"></div>
     </div>
-    <input type="hidden" id="v-cli-id" value=""/>
-    <div id="v-cli-selected" style="display:none;margin-top:8px;padding:8px 12px;background:var(--gdim);border:1px solid var(--gmid);border-radius:var(--r);font-size:12px;display:none;align-items:center;justify-content:space-between">
-      <div>
-        <span style="color:var(--green);font-weight:600" id="v-cli-sel-id"></span>
-        <span style="color:var(--text);margin-left:8px" id="v-cli-sel-nom"></span>
-        <span style="color:var(--text3);font-size:10px;margin-left:6px" id="v-cli-sel-placa"></span>
-      </div>
-      <button class="btn bsm" onclick="vcliClear()" style="padding:3px 8px">✕</button>
+    <input type="hidden" id="vta-cli-fk" value=""/>
+    <div class="cs-tag" id="vta-cli-tag">
+      <span><strong id="vta-cli-tag-id" style="color:var(--green)"></strong>&nbsp;<span id="vta-cli-tag-nom" style="color:var(--text)"></span></span>
+      <button class="btn bsm" onclick="csClear('vta-cli')">✕</button>
     </div>
   </div>
-
   <div class="fr c3">
-    <div class="fg"><label class="fl">Servicio</label><select class="fs" id="v-srv" onchange="calcTotal()"></select></div>
-    <div class="fg"><label class="fl">Empleado</label><select class="fs" id="v-emp"></select></div>
-    <div class="fg"><label class="fl">Promoción</label><select class="fs" id="v-pro" onchange="calcTotal()"><option value="0|none|0">Sin promoción</option></select></div>
+    <div class="fg"><label class="fl">Servicio</label><select class="fs" id="vta-srv" onchange="calcTotal()"></select></div>
+    <div class="fg"><label class="fl">Empleado</label><select class="fs" id="vta-emp"></select></div>
+    <div class="fg"><label class="fl">Promoción</label><select class="fs" id="vta-pro" onchange="calcTotal()"><option value="0|none|0">Sin promoción</option></select></div>
   </div>
-
   <div class="fr c2">
-    <div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="v-ref"><option value="">No aplica</option></select></div>
-    <div class="fg">
-      <label class="fl">Total a cobrar</label>
-      <div style="font-family:var(--fh);font-size:24px;font-weight:700;color:var(--green);padding:6px 0" id="v-total">$0.00</div>
-    </div>
+    <div class="fg"><label class="fl">Referido por</label><select class="fs" id="vta-ref"><option value="">No aplica</option></select></div>
+    <div class="fg"><label class="fl">Total a cobrar</label><div style="font-family:var(--fh);font-size:24px;font-weight:700;color:var(--green);padding:6px 0" id="vta-total">$0.00</div></div>
   </div>
-
-  <!-- Método de pago -->
   <div class="fg">
     <label class="fl">Método de pago</label>
-    <div class="pay-btns">
-      <button class="pay-btn sel" id="pb-ef" onclick="selPago('efectivo')">💵 Efectivo</button>
-      <button class="pay-btn tr" id="pb-tr" onclick="selPago('transferencia')">📱 Transferencia</button>
-      <button class="pay-btn tc" id="pb-tc" onclick="selPago('tarjeta')">💳 Tarjeta</button>
+    <div class="pay-wrap">
+      <button class="pay-btn pay-ef" id="vta-pay-ef" onclick="selPago('efectivo')">💵 Efectivo</button>
+      <button class="pay-btn" id="vta-pay-tr" onclick="selPago('transferencia')">📱 Transferencia</button>
+      <button class="pay-btn" id="vta-pay-tc" onclick="selPago('tarjeta')">💳 Tarjeta</button>
     </div>
-    <input type="hidden" id="v-pago" value="efectivo"/>
+    <input type="hidden" id="vta-pago" value="efectivo"/>
   </div>
-
-  <div class="fa">
-    <button class="btn" onclick="closeModal('m-venta')">Cancelar</button>
-    <button class="btn bp" id="btn-venta" onclick="guardarVenta()">Registrar venta</button>
-  </div>
+  <div class="fa"><button class="btn" onclick="closeModal('m-venta')">Cancelar</button><button class="btn bp" id="btn-venta" onclick="guardarVenta()">Registrar venta</button></div>
 </div></div>
 
-<div class="mo" id="m-cita"><div class="md2">
-  <div class="mtt">Agendar cita</div>
-  <div class="fr c2"><div class="fg"><label class="fl">Cliente</label><input class="fi" id="c-cli" placeholder="Nombre"/></div><div class="fg"><label class="fl">Teléfono</label><input class="fi" id="c-tel" placeholder="+503 7000-0000"/></div></div>
-  <div class="fr c3"><div class="fg"><label class="fl">Fecha</label><input class="fi" type="date" id="c-fec"/></div><div class="fg"><label class="fl">Hora</label><select class="fs" id="c-hor"><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div><div class="fg"><label class="fl">Canal</label><select class="fs" id="c-can"></select></div></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Servicio</label><select class="fs" id="c-srv"></select></div><div class="fg"><label class="fl">Empleado asignado</label><select class="fs" id="c-emp"></select></div></div>
-  <div class="fg"><label class="fl">Notas</label><input class="fi" id="c-not" placeholder="Color del vehículo, placa, etc."/></div>
+<!-- CITA - IDs: cta-cli, cta-tel, cta-fec, cta-hor, cta-can, cta-srv, cta-emp, cta-not -->
+<div class="mo" id="m-cita"><div class="mo-box">
+  <div class="mo-title">Agendar cita</div>
+  <div class="fr c2"><div class="fg"><label class="fl">Cliente</label><input class="fi" id="cta-cli" placeholder="Nombre"/></div><div class="fg"><label class="fl">Teléfono</label><input class="fi" id="cta-tel" placeholder="+503 7000-0000"/></div></div>
+  <div class="fr c3">
+    <div class="fg"><label class="fl">Fecha</label><input class="fi" type="date" id="cta-fec"/></div>
+    <div class="fg"><label class="fl">Hora</label><select class="fs" id="cta-hor"><option>8:00 AM</option><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div>
+    <div class="fg"><label class="fl">Canal</label><select class="fs" id="cta-can"></select></div>
+  </div>
+  <div class="fr c2"><div class="fg"><label class="fl">Servicio</label><select class="fs" id="cta-srv"></select></div><div class="fg"><label class="fl">Empleado</label><select class="fs" id="cta-emp"></select></div></div>
+  <div class="fg"><label class="fl">Notas</label><input class="fi" id="cta-not" placeholder="Color del vehículo, placa, etc."/></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-cita')">Cancelar</button><button class="btn bp" id="btn-cita" onclick="guardarCita()">Agendar cita</button></div>
 </div></div>
 
-<div class="mo" id="m-empleado"><div class="md2">
-  <div class="mtt">Agregar empleado</div>
-  <div class="fr c2"><div class="fg"><label class="fl">Nombre completo</label><input class="fi" id="e-nom" placeholder="Juan Pérez"/></div><div class="fg"><label class="fl">Teléfono</label><input class="fi" id="e-tel" placeholder="+503 7000-0000"/></div></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Cargo</label><select class="fs" id="e-car"></select></div><div class="fg"><label class="fl">Salario base / mes ($)</label><input class="fi" type="number" id="e-sal" placeholder="300"/></div></div>
+<!-- EMPLEADO - IDs: emp-nom, emp-tel, emp-car, emp-sal -->
+<div class="mo" id="m-empleado"><div class="mo-box">
+  <div class="mo-title">Agregar empleado</div>
+  <div class="fr c2"><div class="fg"><label class="fl">Nombre completo</label><input class="fi" id="emp-nom" placeholder="Juan Pérez"/></div><div class="fg"><label class="fl">Teléfono</label><input class="fi" id="emp-tel" placeholder="+503 7000-0000"/></div></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Cargo</label><select class="fs" id="emp-car"></select></div><div class="fg"><label class="fl">Salario base / mes ($)</label><input class="fi" type="number" id="emp-sal" placeholder="300"/></div></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-empleado')">Cancelar</button><button class="btn bp" id="btn-emp" onclick="guardarEmpleado()">Agregar</button></div>
 </div></div>
 
-<div class="mo" id="m-promo"><div class="md2">
-  <div class="mtt">Nueva promoción</div>
-  <div class="fg"><label class="fl">Nombre de la promoción</label><input class="fi" id="p-nom" placeholder="2x1 lavado básico"/></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Tipo de descuento</label><select class="fs" id="p-tip"><option value="pct">Porcentaje (%)</option><option value="fijo">Monto fijo ($)</option><option value="2x1">2×1</option></select></div><div class="fg"><label class="fl">Valor</label><input class="fi" type="number" id="p-val" placeholder="10"/></div></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Válida desde</label><input class="fi" type="date" id="p-des"/></div><div class="fg"><label class="fl">Válida hasta</label><input class="fi" type="date" id="p-has"/></div></div>
-  <div class="fa"><button class="btn" onclick="closeModal('m-promo')">Cancelar</button><button class="btn bp" id="btn-promo" onclick="guardarPromo()">Crear promoción</button></div>
-</div></div>
-
-<div class="mo" id="m-regla"><div class="md2">
-  <div class="mtt">Nueva regla de bono</div>
-  <div class="fg"><label class="fl">Tipo de bono</label><select class="fs" id="r-tip"><option value="servicios">Por número de servicios</option><option value="meta">Meta de ventas ($)</option><option value="referido">Comisión por referido</option></select></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Meta / umbral</label><input class="fi" type="number" id="r-met" placeholder="40"/></div><div class="fg"><label class="fl">Bono a pagar ($)</label><input class="fi" type="number" id="r-bon" placeholder="25"/></div></div>
-  <div class="fg"><label class="fl">Descripción</label><input class="fi" id="r-des" placeholder="Ej: $25 por alcanzar 40 servicios"/></div>
+<!-- REGLA - IDs: reg-tip, reg-met, reg-bon, reg-des -->
+<div class="mo" id="m-regla"><div class="mo-box">
+  <div class="mo-title">Nueva regla de bono</div>
+  <div class="fg"><label class="fl">Tipo de bono</label><select class="fs" id="reg-tip"><option value="servicios">Por número de servicios</option><option value="meta">Meta de ventas ($)</option><option value="referido">Comisión por referido</option></select></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Meta / umbral</label><input class="fi" type="number" id="reg-met" placeholder="40"/></div><div class="fg"><label class="fl">Bono a pagar ($)</label><input class="fi" type="number" id="reg-bon" placeholder="25"/></div></div>
+  <div class="fg"><label class="fl">Descripción</label><input class="fi" id="reg-des" placeholder="Ej: $25 por alcanzar 40 servicios"/></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-regla')">Cancelar</button><button class="btn bp" id="btn-regla" onclick="guardarRegla()">Guardar regla</button></div>
 </div></div>
 
-<div class="mo" id="m-cliente"><div class="md2">
-  <div class="mtt" id="m-cliente-title">Nuevo cliente</div>
-  <input type="hidden" id="cl-edit-id" value=""/>
-  <div style="background:var(--gdim);border:1px solid var(--gmid);border-radius:var(--r);padding:10px 14px;margin-bottom:16px;font-size:11px;color:var(--green)" id="cl-id-display" style="display:none">
-    ID de cliente: <strong id="cl-id-val">—</strong>
-  </div>
-  <div class="fr c2">
-    <div class="fg"><label class="fl">Nombre completo</label><input class="fi" id="cl-nom" placeholder="Ana Rodríguez"/></div>
-    <div class="fg"><label class="fl">Teléfono</label><input class="fi" id="cl-tel" placeholder="+503 7000-0000"/></div>
-  </div>
-  <div class="fr c2">
-    <div class="fg"><label class="fl">Email</label><input class="fi" id="cl-email" placeholder="cliente@gmail.com" type="email"/></div>
-    <div class="fg"><label class="fl">DUI (opcional)</label><input class="fi" id="cl-dui" placeholder="00000000-0"/></div>
-  </div>
-  <div class="fr c2">
-    <div class="fg">
-      <label class="fl">Placa del vehículo</label>
-      <input class="fi" id="cl-placa" placeholder="P123-456" oninput="this.value=this.value.toUpperCase()"/>
-      <div style="font-size:10px;color:var(--text3);margin-top:4px">Una vez registrada no puede duplicarse</div>
-    </div>
-    <div class="fg"><label class="fl">Vehículo (marca/modelo)</label><input class="fi" id="cl-veh" placeholder="Toyota Corolla blanco"/></div>
-  </div>
-  <div class="fr c2">
-    <div class="fg"><label class="fl">Dirección</label><input class="fi" id="cl-dir" placeholder="Col. Escalón, San Salvador"/></div>
-    <div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="cl-ref"><option value="">Nadie / llegó solo</option></select></div>
-  </div>
-  <div class="fa">
-    <button class="btn" onclick="closeModal('m-cliente')">Cancelar</button>
-    <button class="btn bp" id="btn-cli" onclick="guardarCliente()">Guardar cliente</button>
-  </div>
+<!-- PROMO - IDs: pro-nom, pro-tip, pro-val, pro-des, pro-has -->
+<div class="mo" id="m-promo"><div class="mo-box">
+  <div class="mo-title">Nueva promoción</div>
+  <div class="fg"><label class="fl">Nombre de la promoción</label><input class="fi" id="pro-nom" placeholder="2x1 lavado básico"/></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Tipo de descuento</label><select class="fs" id="pro-tip"><option value="pct">Porcentaje (%)</option><option value="fijo">Monto fijo ($)</option><option value="2x1">2×1</option></select></div><div class="fg"><label class="fl">Valor</label><input class="fi" type="number" id="pro-val" placeholder="10"/></div></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Válida desde</label><input class="fi" type="date" id="pro-des"/></div><div class="fg"><label class="fl">Válida hasta</label><input class="fi" type="date" id="pro-has"/></div></div>
+  <div class="fa"><button class="btn" onclick="closeModal('m-promo')">Cancelar</button><button class="btn bp" id="btn-promo" onclick="guardarPromo()">Crear promoción</button></div>
 </div></div>
 
-<div class="mo" id="m-servicio"><div class="md2">
-  <div class="mtt">Agregar tipo de servicio</div>
-  <div class="fr c2"><div class="fg"><label class="fl">Nombre del servicio</label><input class="fi" id="s-nom" placeholder="Lavado completo"/></div><div class="fg"><label class="fl">Precio ($)</label><input class="fi" type="number" id="s-pre" placeholder="20"/></div></div>
+<!-- CLIENTE - IDs: cli-nom, cli-tel, cli-email, cli-dui, cli-placa, cli-veh, cli-dir, cli-ref -->
+<div class="mo" id="m-cliente"><div class="mo-box">
+  <div class="mo-title" id="cli-modal-title">Nuevo cliente</div>
+  <input type="hidden" id="cli-edit-id" value=""/>
+  <div id="cli-id-bar" style="display:none;background:var(--gdim);border:1px solid var(--gmid);border-radius:var(--r);padding:8px 14px;margin-bottom:14px;font-size:11px;color:var(--green)">ID: <strong id="cli-id-val"></strong></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Nombre completo</label><input class="fi" id="cli-nom" placeholder="Ana Rodríguez"/></div><div class="fg"><label class="fl">Teléfono</label><input class="fi" id="cli-tel" placeholder="+503 7000-0000"/></div></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Email</label><input class="fi" id="cli-email" type="email" placeholder="cliente@gmail.com"/></div><div class="fg"><label class="fl">DUI (opcional)</label><input class="fi" id="cli-dui" placeholder="00000000-0"/></div></div>
+  <div class="fr c2">
+    <div class="fg"><label class="fl">Placa del vehículo</label><input class="fi" id="cli-placa" placeholder="P123-456" oninput="this.value=this.value.toUpperCase()"/><div style="font-size:10px;color:var(--text3);margin-top:4px">No se puede duplicar</div></div>
+    <div class="fg"><label class="fl">Vehículo (marca/modelo)</label><input class="fi" id="cli-veh" placeholder="Toyota Corolla blanco"/></div>
+  </div>
+  <div class="fr c2"><div class="fg"><label class="fl">Dirección</label><input class="fi" id="cli-dir" placeholder="Col. Escalón, San Salvador"/></div><div class="fg"><label class="fl">Referido por empleado</label><select class="fs" id="cli-ref"><option value="">Nadie / llegó solo</option></select></div></div>
+  <div class="fa"><button class="btn" onclick="closeModal('m-cliente')">Cancelar</button><button class="btn bp" id="btn-cli" onclick="guardarCliente()">Guardar cliente</button></div>
+</div></div>
+
+<!-- SERVICIO - IDs: srv-nom, srv-pre -->
+<div class="mo" id="m-servicio"><div class="mo-box">
+  <div class="mo-title">Tipo de servicio</div>
+  <div class="fr c2"><div class="fg"><label class="fl">Nombre</label><input class="fi" id="srv-nom" placeholder="Lavado completo"/></div><div class="fg"><label class="fl">Precio ($)</label><input class="fi" type="number" id="srv-pre" placeholder="20"/></div></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-servicio')">Cancelar</button><button class="btn bp" id="btn-srv" onclick="guardarServicio()">Guardar</button></div>
 </div></div>
 
-<div class="mo" id="m-canal"><div class="md2">
-  <div class="mtt">Agregar canal de cita</div>
-  <div class="fg"><label class="fl">Nombre del canal</label><input class="fi" id="cn-nom" placeholder="WhatsApp, App, Instagram..."/></div>
+<!-- CANAL - IDs: can-nom -->
+<div class="mo" id="m-canal"><div class="mo-box">
+  <div class="mo-title">Canal de cita</div>
+  <div class="fg"><label class="fl">Nombre del canal</label><input class="fi" id="can-nom" placeholder="WhatsApp, App..."/></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-canal')">Cancelar</button><button class="btn bp" id="btn-canal" onclick="guardarCanal()">Guardar</button></div>
 </div></div>
 
-<div class="mo" id="m-cargo"><div class="md2">
-  <div class="mtt">Agregar cargo</div>
-  <div class="fg"><label class="fl">Nombre del cargo</label><input class="fi" id="cg-nom" placeholder="Detallista, Encargado..."/></div>
+<!-- CARGO - IDs: car-nom -->
+<div class="mo" id="m-cargo"><div class="mo-box">
+  <div class="mo-title">Cargo de empleado</div>
+  <div class="fg"><label class="fl">Nombre del cargo</label><input class="fi" id="car-nom" placeholder="Detallista, Encargado..."/></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-cargo')">Cancelar</button><button class="btn bp" id="btn-cargo" onclick="guardarCargo()">Guardar</button></div>
 </div></div>
 
-<div class="mo" id="m-usuario"><div class="md2">
-  <div class="mtt">Agregar usuario</div>
-  <div class="fg"><label class="fl">Email de Gmail</label><input class="fi" id="u-email" placeholder="empleado@gmail.com"/></div>
-  <div class="fr c2"><div class="fg"><label class="fl">Nombre</label><input class="fi" id="u-nom" placeholder="Juan Pérez"/></div><div class="fg"><label class="fl">Rol</label><select class="fs" id="u-rol"><option value="encargado">Encargado</option><option value="admin">Admin</option></select></div></div>
+<!-- USUARIO - IDs: usr-email, usr-nom, usr-rol -->
+<div class="mo" id="m-usuario"><div class="mo-box">
+  <div class="mo-title">Agregar usuario</div>
+  <div class="fg"><label class="fl">Email de Gmail</label><input class="fi" id="usr-email" placeholder="empleado@gmail.com"/></div>
+  <div class="fr c2"><div class="fg"><label class="fl">Nombre</label><input class="fi" id="usr-nom" placeholder="Juan Pérez"/></div><div class="fg"><label class="fl">Rol</label><select class="fs" id="usr-rol"><option value="encargado">Encargado</option><option value="admin">Admin</option></select></div></div>
   <div class="fa"><button class="btn" onclick="closeModal('m-usuario')">Cancelar</button><button class="btn bp" id="btn-usr" onclick="guardarUsuario()">Agregar acceso</button></div>
 </div></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── CREDENCIALES ──────────────────────────────────────────────
-const SUPABASE_URL = 'https://tlabfdavbcsfxekeazzr.supabase.co';  // https://xxxx.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsYWJmZGF2YmNzZnhla2VhenpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTA0NTEsImV4cCI6MjA5MzQ2NjQ1MX0.rUs8AFSjSceEsney98UvSdCVvaDyPCILI27My_1ffS4';  // eyJ...
-// ───────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// CREDENCIALES — pega las tuyas aquí
+// ══════════════════════════════════════════════
+const SUPABASE_URL = 'https://tlabfdavbcsfxekeazzr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsYWJmZGF2YmNzZnhla2VhenpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTA0NTEsImV4cCI6MjA5MzQ2NjQ1MX0.rUs8AFSjSceEsney98UvSdCVvaDyPCILI27My_1ffS4';
 
-const COLS=['var(--green)','var(--blue)','var(--amber)','var(--purple)'];
-const COLBG=['var(--gdim)','var(--bdim)','var(--adim)','var(--pdim)'];
-const SLOTC=['sc0','sc1','sc2','sc3'];
-function ec(i){return COLS[i%4]} function eb(i){return COLBG[i%4]}
-function bdg(t,l){const m={g:'bgg',a:'bga',b:'bgb',r:'bgr',gr:'bggr'};return `<span class="badge ${m[t]||'bggr'}">${l}</span>`}
-function toast(msg,err=false){const el=document.getElementById('toast');el.textContent=msg;el.style.background=err?'var(--red)':'var(--green)';el.style.color=err?'#fff':'#000';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2400)}
-function setBtn(id,loading){const el=document.getElementById(id);if(!el)return;if(!el.dataset.orig)el.dataset.orig=el.textContent;el.disabled=loading;el.textContent=loading?'Guardando...':el.dataset.orig}
-function fmtTime(ts){const d=new Date(ts);let h=d.getHours(),m=d.getMinutes();const ap=h>=12?'PM':'AM';h=h%12||12;return `${h}:${m.toString().padStart(2,'0')} ${ap}`}
-function fmtDate(s){if(!s)return '—';const[y,mo,d]=s.split('-');return `${d}/${mo}/${y}`}
-function todayStr(){return new Date().toISOString().split('T')[0]}
-function weekDay(i){const d=new Date(),day=d.getDay();d.setDate(d.getDate()-(day===0?6:day-1)+i);return d.toISOString().split('T')[0]}
+// ══════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════
+let sb = null;
+let ROL = 'encargado';
+let _emps = null, _srvs = null, _cans = null, _cars = null;
+let _csTimer = null;
 
-let sb=null,_emps=null,_srvs=null,_cans=null,_cars=null,_rol='encargado';
+const COLS  = ['var(--green)','var(--blue)','var(--amber)','var(--purple)'];
+const CBGS  = ['var(--gdim)','var(--bdim)','var(--adim)','var(--pdim)'];
+const AGCLS = ['ag-c0','ag-c1','ag-c2','ag-c3'];
+const PIMAP = { efectivo:'💵', transferencia:'📱', tarjeta:'💳' };
 
-// ===== AUTH =====
+// ══════════════════════════════════════════════
+// UTILIDADES
+// ══════════════════════════════════════════════
+const ec  = i => COLS[i % 4];
+const eb  = i => CBGS[i % 4];
+const bdg = (t, l) => `<span class="badge ${({g:'bg',a:'ba',b:'bb',r:'br',gr:'bgr'})[t]||'bgr'}">${l}</span>`;
+
+function toast(msg, err=false){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = err ? 'var(--red)' : 'var(--green)';
+  el.style.color = err ? '#fff' : '#000';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function setBtn(id, loading){
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!el.dataset.orig) el.dataset.orig = el.textContent;
+  el.disabled = loading;
+  el.textContent = loading ? 'Guardando...' : el.dataset.orig;
+}
+
+function g(id){ return document.getElementById(id); }
+function gv(id){ const el = g(id); return el ? el.value : ''; }
+
+function fmtTime(ts){
+  const d = new Date(ts);
+  let h = d.getHours(), m = d.getMinutes();
+  const ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return `${h}:${m.toString().padStart(2,'0')} ${ap}`;
+}
+function fmtDate(s){ if (!s) return '—'; const [y,mo,d]=s.split('-'); return `${d}/${mo}/${y}`; }
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function weekDay(i){ const d=new Date(), day=d.getDay(); d.setDate(d.getDate()-(day===0?6:day-1)+i); return d.toISOString().split('T')[0]; }
+
+// ══════════════════════════════════════════════
+// CACHE
+// ══════════════════════════════════════════════
+async function getEmps(f=false){ if(!_emps||f){ const{data}=await sb.from('empleados').select('*').order('nombre'); _emps=data||[]; } return _emps; }
+async function getSrvs(f=false){ if(!_srvs||f){ const{data}=await sb.from('servicios').select('*').eq('activo',true).order('nombre'); _srvs=data||[]; } return _srvs; }
+async function getCans(f=false){ if(!_cans||f){ const{data}=await sb.from('canales').select('*').eq('activo',true).order('nombre'); _cans=data||[]; } return _cans; }
+async function getCars(f=false){ if(!_cars||f){ const{data}=await sb.from('cargos').select('*').eq('activo',true).order('nombre'); _cars=data||[]; } return _cars; }
+
+// ══════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════
 async function loginGoogle(){
-  const err=document.getElementById('login-err');
-  err.style.display='none';
-  const{error}=await sb.auth.signInWithOAuth({
-    provider:'google',
-    options:{redirectTo:window.location.href}
-  });
-  if(error){err.textContent='Error: '+error.message;err.style.display='block'}
+  const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:window.location.href } });
+  if (error){ g('login-err').textContent='Error: '+error.message; g('login-err').style.display='block'; }
 }
 
 async function logout(){
   await sb.auth.signOut();
-  document.getElementById('app').style.display='none';
-  document.getElementById('login-screen').style.display='flex';
 }
 
-function setUserUI(user){
-  document.getElementById('user-name').textContent=user.user_metadata?.full_name||user.email||'Usuario';
-  const avatar=document.getElementById('user-avatar');
-  if(user.user_metadata?.avatar_url){avatar.src=user.user_metadata.avatar_url;avatar.style.display='block'}
-  else{avatar.style.display='none'}
-}
-
-// ===== CACHE =====
-async function getEmps(f=false){if(!_emps||f){const{data}=await sb.from('empleados').select('*').order('nombre');_emps=data||[]}return _emps}
-async function getSrvs(f=false){if(!_srvs||f){const{data}=await sb.from('servicios').select('*').eq('activo',true).order('nombre');_srvs=data||[]}return _srvs}
-async function getCans(f=false){if(!_cans||f){const{data}=await sb.from('canales').select('*').eq('activo',true).order('nombre');_cans=data||[]}return _cans}
-async function getCars(f=false){if(!_cars||f){const{data}=await sb.from('cargos').select('*').eq('activo',true).order('nombre');_cars=data||[]}return _cars}
-
-// ===== NAV =====
-function nav(page,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  if(el)el.classList.add('active');
-  const map={dashboard:renderDashboard,ventas:()=>renderVentas('hoy'),agenda:renderAgenda,empleados:renderEmpleados,bonos:renderBonos,promociones:renderPromociones,clientes:()=>renderClientes(''),admin:renderAdmin,usuarios:renderUsuarios};
-  // Block access for encargado
-  if(_rol!=='admin'&&(page==='bonos'||page==='admin'||page==='usuarios')){
-    document.getElementById('page-'+page).innerHTML=`<div class="access-denied"><div class="access-denied-icon">🔒</div><div class="access-denied-text">Acceso restringido</div><div class="access-denied-sub">Solo el administrador puede ver esta sección.</div></div>`;
+async function initApp(user){
+  const { data: u } = await sb.from('usuarios').select('rol,activo,nombre').eq('email', user.email.toLowerCase()).single();
+  if (!u || !u.activo){
+    await sb.auth.signOut();
+    g('login-err').textContent = 'Tu cuenta no tiene acceso. Contacta al administrador.';
+    g('login-err').style.display = 'block';
     return;
   }
-  if(map[page])map[page]();
+  ROL = u.rol;
+  g('user-nm').textContent = u.nombre || user.email;
+  const av = g('user-av');
+  if (user.user_metadata?.avatar_url){ av.src=user.user_metadata.avatar_url; av.style.display=''; } else av.style.display='none';
+  g('user-rol').textContent = ROL==='admin' ? 'Admin' : 'Encargado';
+  g('user-rol').className = `role-pill ${ROL==='admin'?'rp-admin':'rp-enc'}`;
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display = ROL==='admin' ? '' : 'none');
+  g('login-screen').style.display = 'none';
+  g('app').style.display = 'flex';
+  renderDashboard();
 }
 
-// ===== MODALS =====
-document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
-function closeModal(id){document.getElementById(id).classList.remove('open')}
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function nav(page, el){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  const pg = g('page-'+page);
+  if (!pg) return;
+  if (ROL!=='admin' && ['empleados','bonos','admin','usuarios'].includes(page)){
+    pg.innerHTML = `<div class="access-denied"><div style="font-size:48px">🔒</div><div style="font-family:var(--fh);font-size:18px;color:var(--text2)">Acceso restringido</div><div style="font-size:12px;color:var(--text3)">Solo el administrador puede ver esta sección.</div></div>`;
+  }
+  pg.classList.add('active');
+  if (el) el.classList.add('active');
+  const renders = { dashboard:renderDashboard, ventas:()=>renderVentas('hoy'), agenda:renderAgenda, empleados:renderEmpleados, bonos:renderBonos, promociones:renderPromociones, clientes:()=>renderClientes(''), admin:renderAdmin, usuarios:renderUsuarios };
+  if (renders[page] && !(ROL!=='admin' && ['empleados','bonos','admin','usuarios'].includes(page))) renders[page]();
+}
+
+// ══════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════
+document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }));
+function closeModal(id){ g(id).classList.remove('open'); }
 
 async function openModal(id){
-  const emps=await getEmps(),srvs=await getSrvs(),cans=await getCans(),cars=await getCars();
-  const activos=emps.filter(e=>e.activo);
-  const eo=activos.map(e=>`<option value="${e.id}">${e.nombre}</option>`).join('');
-  ['v-emp','c-emp'].forEach(x=>{const el=document.getElementById(x);if(el)el.innerHTML=eo});
-  ['v-ref','cl-ref'].forEach(x=>{const el=document.getElementById(x);if(el)el.innerHTML=`<option value="">No aplica</option>`+eo});
-  const ve=document.getElementById('v-srv');if(ve)ve.innerHTML=srvs.map(s=>`<option value="${s.id}|${s.precio}">${s.nombre} – $${parseFloat(s.precio).toFixed(0)}</option>`).join('');
-  const ce=document.getElementById('c-srv');if(ce)ce.innerHTML=srvs.map(s=>`<option value="${s.nombre}">${s.nombre}</option>`).join('');
-  const cc=document.getElementById('c-can');if(cc)cc.innerHTML=cans.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
-  const ec2=document.getElementById('e-car');if(ec2)ec2.innerHTML=cars.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
-  const{data:promos}=await sb.from('promociones').select('*').eq('activa',true);
-  const vp=document.getElementById('v-pro');if(vp)vp.innerHTML=`<option value="0|none|0">Sin promoción</option>`+(promos||[]).map(p=>`<option value="${p.id}|${p.tipo}|${p.valor}">${p.nombre}</option>`).join('');
-  document.querySelectorAll(`#${id} input`).forEach(el=>{if(el.type!=='date')el.value=''});
-  const td=todayStr();['c-fec','p-des','p-has'].forEach(x=>{const el=document.getElementById(x);if(el)el.value=td});
-  calcTotal();
-  // Reset venta modal
-  if(id==='m-venta'){
-    vcliClear();
+  // Load catalog data
+  const [emps, srvs, cans, cars] = await Promise.all([getEmps(), getSrvs(), getCans(), getCars()]);
+  const { data: promos } = await sb.from('promociones').select('*').eq('activa',true);
+  const activos = emps.filter(e => e.activo);
+
+  const empOpts   = activos.map(e=>`<option value="${e.id}">${e.nombre}</option>`).join('');
+  const empNoOpts = `<option value="">No aplica</option>` + empOpts;
+  const srvOpts   = srvs.map(s=>`<option value="${s.id}|${s.precio}">${s.nombre} – $${parseFloat(s.precio).toFixed(0)}</option>`).join('');
+  const srvNmOpts = srvs.map(s=>`<option value="${s.nombre}">${s.nombre}</option>`).join('');
+  const canOpts   = cans.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+  const carOpts   = cars.map(c=>`<option value="${c.nombre}">${c.nombre}</option>`).join('');
+  const proOpts   = `<option value="0|none|0">Sin promoción</option>` + (promos||[]).map(p=>`<option value="${p.id}|${p.tipo}|${p.valor}">${p.nombre}</option>`).join('');
+
+  const set = (elId, html) => { const el=g(elId); if(el) el.innerHTML=html; };
+  const clear = (...ids) => ids.forEach(id => { const el=g(id); if(el) el.value=''; });
+
+  if (id === 'm-venta'){
+    set('vta-srv', srvOpts); set('vta-emp', empOpts); set('vta-pro', proOpts); set('vta-ref', empNoOpts);
+    csClear('vta-cli');
     selPago('efectivo');
+    calcTotal();
   }
-  // Reset cliente modal to 'new' mode
-  if(id==='m-cliente'){
-    document.getElementById('m-cliente-title').textContent='Nuevo cliente';
-    document.getElementById('cl-edit-id').value='';
-    document.getElementById('cl-id-display').style.display='none';
-    document.getElementById('btn-cli').textContent='Guardar cliente';
-    document.getElementById('btn-cli').onclick=guardarCliente;
+  if (id === 'm-cita'){
+    set('cta-srv', srvNmOpts); set('cta-emp', empOpts); set('cta-can', canOpts);
+    g('cta-fec').value = todayStr();
+    clear('cta-cli','cta-tel','cta-not');
   }
-  document.getElementById(id).classList.add('open');
+  if (id === 'm-empleado'){
+    set('emp-car', carOpts);
+    clear('emp-nom','emp-tel','emp-sal');
+  }
+  if (id === 'm-cliente'){
+    set('cli-ref', empNoOpts);
+    g('cli-modal-title').textContent = 'Nuevo cliente';
+    g('cli-edit-id').value = '';
+    g('cli-id-bar').style.display = 'none';
+    g('btn-cli').textContent = 'Guardar cliente';
+    g('btn-cli').onclick = guardarCliente;
+    clear('cli-nom','cli-tel','cli-email','cli-dui','cli-placa','cli-veh','cli-dir');
+  }
+  if (id === 'm-promo'){
+    clear('pro-nom','pro-val');
+    g('pro-des').value = todayStr();
+    g('pro-has').value = todayStr();
+  }
+  if (id === 'm-regla') clear('reg-met','reg-bon','reg-des');
+  if (id === 'm-usuario') clear('usr-email','usr-nom');
+  if (id === 'm-servicio') clear('srv-nom','srv-pre');
+  if (id === 'm-canal') clear('can-nom');
+  if (id === 'm-cargo') clear('car-nom');
+
+  g(id).classList.add('open');
+}
+
+// ══════════════════════════════════════════════
+// CLIENT SEARCH — prefix maps to: {prefix}-input, {prefix}-drop, {prefix}-fk, {prefix}-tag, {prefix}-tag-id, {prefix}-tag-nom
+// ══════════════════════════════════════════════
+function csSearch(q, dropId, prefix){
+  clearTimeout(_csTimer);
+  const drop = g(dropId);
+  if (!drop) return;
+  if (!q || q.length < 2){ drop.classList.remove('open'); return; }
+  _csTimer = setTimeout(async () => {
+    const { data: res } = await sb.from('clientes')
+      .select('id,cliente_id,nombre,placa,tel')
+      .or(`nombre.ilike.%${q}%,cliente_id.ilike.%${q}%,placa.ilike.%${q}%`)
+      .eq('activo', true).limit(6);
+    const items = (res||[]).map(c => `
+      <div class="cs-opt" onclick="csSel('${prefix}',${c.id},'${(c.cliente_id||'').replace(/'/g,"\\'")}','${c.nombre.replace(/'/g,"\\'")}')">
+        <div><div>${c.nombre}</div><div class="cs-opt-sub">${c.tel||''} ${c.placa?'· '+c.placa:''}</div></div>
+        <span class="cs-opt-id">${c.cliente_id||''}</span>
+      </div>`).join('');
+    const newOpt = `<div class="cs-new" onclick="csCrear('${prefix}','${q.replace(/'/g,"\\'")}')">＋ Crear cliente "<strong>${q}</strong>"</div>`;
+    drop.innerHTML = items + newOpt;
+    drop.classList.add('open');
+  }, 300);
+}
+
+function csSel(prefix, id, cid, nom){
+  const input  = g(prefix+'-input');
+  const fk     = g(prefix+'-fk');
+  const tag    = g(prefix+'-tag');
+  const tagId  = g(prefix+'-tag-id');
+  const tagNom = g(prefix+'-tag-nom');
+  const drop   = g(prefix+'-drop');
+  if (input)  { input.value = nom; input.style.display = 'none'; }
+  if (fk)     fk.value = id;
+  if (tagId)  tagId.textContent = cid;
+  if (tagNom) tagNom.textContent = nom;
+  if (tag)    tag.classList.add('show');
+  if (drop)   drop.classList.remove('open');
+}
+
+function csClear(prefix){
+  const input = g(prefix+'-input');
+  const fk    = g(prefix+'-fk');
+  const tag   = g(prefix+'-tag');
+  const drop  = g(prefix+'-drop');
+  if (input) { input.value = ''; input.style.display = ''; }
+  if (fk)    fk.value = '';
+  if (tag)   tag.classList.remove('show');
+  if (drop)  drop.classList.remove('open');
+}
+
+async function csCrear(prefix, nombre){
+  g(prefix+'-drop').classList.remove('open');
+  const { data: c, error } = await sb.from('clientes').insert({ nombre, visitas:0, gasto_total:0 }).select().single();
+  if (error){ toast('Error creando cliente', true); return; }
+  toast('Cliente ' + (c.cliente_id||'') + ' creado ✓');
+  csSel(prefix, c.id, c.cliente_id||'', c.nombre);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.cs-wrap')) document.querySelectorAll('.cs-drop').forEach(d => d.classList.remove('open'));
+});
+
+// ══════════════════════════════════════════════
+// PAYMENT
+// ══════════════════════════════════════════════
+function selPago(tipo){
+  g('vta-pago').value = tipo;
+  g('vta-pay-ef').className = 'pay-btn' + (tipo==='efectivo'     ? ' pay-ef' : '');
+  g('vta-pay-tr').className = 'pay-btn' + (tipo==='transferencia' ? ' pay-tr' : '');
+  g('vta-pay-tc').className = 'pay-btn' + (tipo==='tarjeta'       ? ' pay-tc' : '');
 }
 
 function calcTotal(){
-  const srv=document.getElementById('v-srv');if(!srv)return;
-  let total=parseFloat((srv.value||'').split('|')[1]||0);
-  const pro=document.getElementById('v-pro');
-  if(pro&&pro.value){const pp=pro.value.split('|');if(pp[1]!=='none'){const tipo=pp[1],val=parseFloat(pp[2]||0);if(tipo==='pct')total*=(1-val/100);else if(tipo==='fijo')total=Math.max(0,total-val);else if(tipo==='2x1')total/=2;}}
-  const el=document.getElementById('v-total');if(el)el.textContent='$'+total.toFixed(2);
-}
-
-// ===== CLIENTE SEARCH EN VENTA =====
-let _vcliTimer=null;
-function vcliSearch(q){
-  const drop=document.getElementById('v-cli-drop');
-  clearTimeout(_vcliTimer);
-  if(!q||q.length<2){drop.classList.remove('open');return;}
-  _vcliTimer=setTimeout(async()=>{
-    const{data:res}=await sb.from('clientes').select('id,cliente_id,nombre,placa,tel').or(`nombre.ilike.%${q}%,cliente_id.ilike.%${q}%,placa.ilike.%${q}%`).eq('activo',true).limit(6);
-    const items=(res||[]).map(c=>`<div class="cl-option" onclick="vcliSel(${c.id},'${(c.cliente_id||'').replace(/'/g,"\'")}','${c.nombre.replace(/'/g,"\'")}')"><div><div>${c.nombre}</div><div class="cl-option-sub">${c.tel||''} ${c.placa?'· '+c.placa:''}</div></div><span class="cl-option-id">${c.cliente_id||''}</span></div>`).join('');
-    const newOpt=`<div class="cl-new-opt" onclick="vcliCrear('${q.replace(/'/g,"\'")}')">＋ Crear cliente "<strong>${q}</strong>"</div>`;
-    drop.innerHTML=items+newOpt;
-    drop.classList.add('open');
-  },300);
-}
-function vcliSel(id,cid,nom){
-  document.getElementById('v-cli').value=nom;
-  document.getElementById('v-cli-fk').value=id;
-  document.getElementById('v-cli-tag-id').textContent=cid;
-  document.getElementById('v-cli-tag-nom').textContent=nom;
-  const tag=document.getElementById('v-cli-tag');tag.style.display='flex';
-  document.getElementById('v-cli').style.display='none';
-  document.getElementById('v-cli-drop').classList.remove('open');
-}
-function vcliClear(){
-  document.getElementById('v-cli').value='';
-  document.getElementById('v-cli').style.display='';
-  document.getElementById('v-cli-fk').value='';
-  document.getElementById('v-cli-tag').style.display='none';
-  document.getElementById('v-cli-drop').classList.remove('open');
-}
-async function vcliCrear(nombre){
-  document.getElementById('v-cli-drop').classList.remove('open');
-  const{data:c,error}=await sb.from('clientes').insert({nombre,visitas:0,gasto_total:0}).select().single();
-  if(error){toast('Error creando cliente',true);return;}
-  toast('Cliente '+c.cliente_id+' creado ✓');
-  vcliSel(c.id,c.cliente_id||'',c.nombre);
-}
-function selPago(tipo){
-  document.getElementById('v-pago').value=tipo;
-  document.getElementById('pb-ef').className='pay-btn'+(tipo==='efectivo'?' sel':'');
-  document.getElementById('pb-tr').className='pay-btn tr'+(tipo==='transferencia'?' sel':'');
-  document.getElementById('pb-tc').className='pay-btn tc'+(tipo==='tarjeta'?' sel':'');
-}
-document.addEventListener('click',e=>{if(!e.target.closest('.cl-search-wrap'))document.getElementById('v-cli-drop')?.classList.remove('open');});
-
-// ===== GUARDAR VENTA =====
-async function guardarVenta(){
-  const cliNom=document.getElementById('v-cli').value.trim();
-  const cliFk=document.getElementById('v-cli-fk').value;
-  if(!cliNom&&!cliFk){toast('Selecciona o ingresa un cliente',true);return;}
-  setBtn('btn-venta',true);
-  const sp=(document.getElementById('v-srv').value||'').split('|');
-  const pp=(document.getElementById('v-pro').value||'').split('|');
-  const promoId=pp[1]==='none'?null:parseInt(pp[0]);
-  const refId=parseInt(document.getElementById('v-ref').value)||null;
-  const precio=parseFloat((document.getElementById('v-total').textContent||'0').replace('$',''));
-  const empId=parseInt(document.getElementById('v-emp').value);
-  const metodo=document.getElementById('v-pago').value||'efectivo';
-  const clienteIdFK=cliFk?parseInt(cliFk):null;
-  const srvName=sp[0]||'Servicio';
-  const{error}=await sb.from('ventas').insert({
-    cliente_nombre:cliNom||'—', cliente_id:clienteIdFK,
-    servicio:srvName, precio, empleado_id:empId,
-    promo_id:promoId, referido_empleado_id:refId,
-    metodo_pago:metodo, estado:'pagado'
-  });
-  if(!error&&clienteIdFK){
-    const{data:cl}=await sb.from('clientes').select('visitas,gasto_total').eq('id',clienteIdFK).single();
-    if(cl) await sb.from('clientes').update({visitas:(cl.visitas||0)+1,gasto_total:parseFloat(cl.gasto_total||0)+precio,ultimo_servicio:srvName}).eq('id',clienteIdFK);
+  const srv = g('vta-srv'); if (!srv) return;
+  let total = parseFloat((srv.value||'').split('|')[1] || 0);
+  const pro = g('vta-pro');
+  if (pro && pro.value){
+    const pp = pro.value.split('|');
+    if (pp[1] !== 'none'){
+      const tipo=pp[1], val=parseFloat(pp[2]||0);
+      if (tipo==='pct')  total *= (1-val/100);
+      if (tipo==='fijo') total = Math.max(0, total-val);
+      if (tipo==='2x1')  total /= 2;
+    }
   }
-  setBtn('btn-venta',false);
-  if(error){toast('Error: '+error.message,true);return;}
+  const el = g('vta-total');
+  if (el) el.textContent = '$' + total.toFixed(2);
+}
+
+// ══════════════════════════════════════════════
+// GUARDAR: VENTA
+// ══════════════════════════════════════════════
+async function guardarVenta(){
+  const cliInput = (gv('vta-cli-input')||'').trim();
+  const cliFk    = gv('vta-cli-fk');
+  if (!cliInput && !cliFk){ toast('Selecciona o ingresa un cliente', true); return; }
+  setBtn('btn-venta', true);
+  const sp      = (gv('vta-srv')||'').split('|');
+  const pp      = (gv('vta-pro')||'').split('|');
+  const promoId = pp[1]==='none' ? null : parseInt(pp[0]);
+  const refId   = parseInt(gv('vta-ref')) || null;
+  const precio  = parseFloat((g('vta-total').textContent||'0').replace('$',''));
+  const empId   = parseInt(gv('vta-emp'));
+  const metodo  = gv('vta-pago') || 'efectivo';
+  const cliFK   = cliFk ? parseInt(cliFk) : null;
+  const srvName = sp[0] || 'Servicio';
+
+  const { error } = await sb.from('ventas').insert({
+    cliente_nombre: cliInput || '—',
+    cliente_id: cliFK,
+    servicio: srvName,
+    precio, empleado_id: empId,
+    promo_id: promoId,
+    referido_empleado_id: refId,
+    metodo_pago: metodo,
+    estado: 'pagado'
+  });
+
+  if (!error && cliFK){
+    const { data: cl } = await sb.from('clientes').select('visitas,gasto_total').eq('id', cliFK).single();
+    if (cl) await sb.from('clientes').update({ visitas:(cl.visitas||0)+1, gasto_total:parseFloat(cl.gasto_total||0)+precio, ultimo_servicio:srvName }).eq('id', cliFK);
+  }
+
+  setBtn('btn-venta', false);
+  if (error){ toast('Error: '+error.message, true); return; }
   closeModal('m-venta');
-  vcliClear();selPago('efectivo');
-  toast('Venta registrada ✓');renderDashboard();renderVentas('hoy');
+  csClear('vta-cli');
+  selPago('efectivo');
+  toast('Venta registrada ✓');
+  renderDashboard();
+  renderVentas('hoy');
 }
 
+// ══════════════════════════════════════════════
+// GUARDAR: CITA
+// ══════════════════════════════════════════════
 async function guardarCita(){
-  const cli=document.getElementById('c-cli').value.trim();if(!cli){toast('Ingresa el nombre del cliente',true);return}
-  setBtn('btn-cita',true);
-  const{error}=await sb.from('citas').insert({cliente_nombre:cli,cliente_tel:document.getElementById('c-tel').value,fecha:document.getElementById('c-fec').value,hora:document.getElementById('c-hor').value,servicio:document.getElementById('c-srv').value,empleado_id:parseInt(document.getElementById('c-emp').value),canal:document.getElementById('c-can').value,notas:document.getElementById('c-not').value,estado:'pendiente'});
-  setBtn('btn-cita',false);if(error){toast('Error: '+error.message,true);return}
-  closeModal('m-cita');toast('Cita agendada ✓');renderAgenda();
+  const cli = gv('cta-cli').trim();
+  if (!cli){ toast('Ingresa el nombre del cliente', true); return; }
+  setBtn('btn-cita', true);
+  const { error } = await sb.from('citas').insert({
+    cliente_nombre: cli, cliente_tel: gv('cta-tel'),
+    fecha: gv('cta-fec'), hora: gv('cta-hor'),
+    servicio: gv('cta-srv'), empleado_id: parseInt(gv('cta-emp')),
+    canal: gv('cta-can'), notas: gv('cta-not'), estado: 'pendiente'
+  });
+  setBtn('btn-cita', false);
+  if (error){ toast('Error: '+error.message, true); return; }
+  closeModal('m-cita'); toast('Cita agendada ✓'); renderAgenda();
 }
 
+// ══════════════════════════════════════════════
+// GUARDAR: EMPLEADO
+// ══════════════════════════════════════════════
 async function guardarEmpleado(){
-  const nom=document.getElementById('e-nom').value.trim();if(!nom){toast('Ingresa el nombre',true);return}
-  setBtn('btn-emp',true);
-  const emps=await getEmps();const activos=emps.filter(e=>e.activo);
-  const ini=nom.trim().split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
-  const{error}=await sb.from('empleados').insert({nombre:nom,cargo:document.getElementById('e-car').value,tel:document.getElementById('e-tel').value,salario:parseFloat(document.getElementById('e-sal').value)||300,color_idx:activos.length%4,iniciales:ini,activo:true});
-  _emps=null;setBtn('btn-emp',false);if(error){toast('Error: '+error.message,true);return}
-  closeModal('m-empleado');toast('Empleado agregado ✓');renderEmpleados();
+  const nom = gv('emp-nom').trim();
+  if (!nom){ toast('Ingresa el nombre', true); return; }
+  setBtn('btn-emp', true);
+  const emps = await getEmps();
+  const ini = nom.trim().split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+  const { error } = await sb.from('empleados').insert({
+    nombre:nom, cargo:gv('emp-car'), tel:gv('emp-tel'),
+    salario:parseFloat(gv('emp-sal'))||300,
+    color_idx: emps.filter(e=>e.activo).length % 4,
+    iniciales:ini, activo:true
+  });
+  _emps = null; setBtn('btn-emp', false);
+  if (error){ toast('Error: '+error.message, true); return; }
+  closeModal('m-empleado'); toast('Empleado agregado ✓'); renderEmpleados();
 }
 
-async function inactivarEmp(id){if(!confirm('¿Inactivar este empleado?'))return;await sb.from('empleados').update({activo:false}).eq('id',id);_emps=null;toast('Empleado inactivado');renderEmpleados()}
-async function reactivarEmp(id){await sb.from('empleados').update({activo:true}).eq('id',id);_emps=null;toast('Empleado reactivado ✓');renderEmpleados()}
+async function toggleEmp(id, activo){
+  if (activo && !confirm('¿Inactivar este empleado?')) return;
+  await sb.from('empleados').update({ activo: !activo }).eq('id', id);
+  _emps = null; toast(activo ? 'Empleado inactivado' : 'Empleado activado ✓'); renderEmpleados();
+}
+
+// ══════════════════════════════════════════════
+// GUARDAR: REGLA, PROMO, CLIENTE, CATÁLOGOS, USUARIO
+// ══════════════════════════════════════════════
+async function guardarRegla(){
+  const des = gv('reg-des').trim(); if (!des){ toast('Agrega una descripción', true); return; }
+  setBtn('btn-regla', true);
+  const { error } = await sb.from('reglas_bonos').insert({ tipo:gv('reg-tip'), descripcion:des, meta:parseFloat(gv('reg-met'))||0, bono:parseFloat(gv('reg-bon'))||0 });
+  setBtn('btn-regla', false); if (error){ toast('Error: '+error.message, true); return; }
+  closeModal('m-regla'); toast('Regla guardada ✓'); renderBonos();
+}
+async function toggleRegla(id, activa){ await sb.from('reglas_bonos').update({activa:!activa}).eq('id',id); toast(activa?'Regla inactivada':'Regla activada ✓'); renderBonos(); }
 
 async function guardarPromo(){
-  const nom=document.getElementById('p-nom').value.trim();if(!nom){toast('Ingresa el nombre',true);return}
-  setBtn('btn-promo',true);
-  const{error}=await sb.from('promociones').insert({nombre:nom,tipo:document.getElementById('p-tip').value,valor:parseFloat(document.getElementById('p-val').value)||0,desde:document.getElementById('p-des').value,hasta:document.getElementById('p-has').value,usos:0,activa:true});
-  setBtn('btn-promo',false);if(error){toast('Error: '+error.message,true);return}
-  closeModal('m-promo');toast('Promoción creada ✓');renderPromociones();
+  const nom = gv('pro-nom').trim(); if (!nom){ toast('Ingresa el nombre', true); return; }
+  setBtn('btn-promo', true);
+  const { error } = await sb.from('promociones').insert({ nombre:nom, tipo:gv('pro-tip'), valor:parseFloat(gv('pro-val'))||0, desde:gv('pro-des'), hasta:gv('pro-has'), usos:0, activa:true });
+  setBtn('btn-promo', false); if (error){ toast('Error: '+error.message, true); return; }
+  closeModal('m-promo'); toast('Promoción creada ✓'); renderPromociones();
 }
-async function togglePromo(id,activa){await sb.from('promociones').update({activa:!activa}).eq('id',id);toast(activa?'Inactivada':'Activada ✓');renderPromociones()}
-
-async function guardarRegla(){
-  const des=document.getElementById('r-des').value.trim();if(!des){toast('Agrega una descripción',true);return}
-  setBtn('btn-regla',true);
-  const{error}=await sb.from('reglas_bonos').insert({tipo:document.getElementById('r-tip').value,descripcion:des,meta:parseFloat(document.getElementById('r-met').value)||0,bono:parseFloat(document.getElementById('r-bon').value)||0});
-  setBtn('btn-regla',false);if(error){toast('Error: '+error.message,true);return}
-  closeModal('m-regla');toast('Regla guardada ✓');renderBonos();
-}
-async function toggleRegla(id,activa){await sb.from('reglas_bonos').update({activa:!activa}).eq('id',id);toast(activa?'Regla inactivada':'Regla activada ✓');renderBonos()}
+async function togglePromo(id, activa){ await sb.from('promociones').update({activa:!activa}).eq('id',id); toast(activa?'Inactivada':'Activada ✓'); renderPromociones(); }
 
 async function guardarCliente(){
-  const nom=document.getElementById('cl-nom').value.trim();if(!nom){toast('Ingresa el nombre',true);return}
-  setBtn('btn-cli',true);
-  const refId=parseInt(document.getElementById('cl-ref').value)||null;
-  const{error}=await sb.from('clientes').insert({nombre:nom,tel:document.getElementById('cl-tel').value,vehiculo:document.getElementById('cl-veh').value,referido_por_empleado_id:refId});
-  setBtn('btn-cli',false);if(error){toast('Error: '+error.message,true);return}
-  closeModal('m-cliente');toast('Cliente guardado ✓');renderClientes('');
+  const editId = gv('cli-edit-id');
+  if (editId){ await actualizarCliente(parseInt(editId)); return; }
+  const nom = gv('cli-nom').trim(); if (!nom){ toast('Ingresa el nombre', true); return; }
+  const placa = gv('cli-placa').trim().toUpperCase() || null;
+  if (placa){ const {data:dup}=await sb.from('clientes').select('id,nombre').eq('placa',placa); if(dup?.length>0){ toast(`Placa ${placa} ya registrada para ${dup[0].nombre}`,true); return; } }
+  setBtn('btn-cli', true);
+  const { error } = await sb.from('clientes').insert({ nombre:nom, tel:gv('cli-tel')||null, email:gv('cli-email')||null, dui:gv('cli-dui')||null, placa, vehiculo:gv('cli-veh')||null, direccion:gv('cli-dir')||null, referido_por_empleado_id:parseInt(gv('cli-ref'))||null, visitas:0, gasto_total:0 });
+  setBtn('btn-cli', false); if (error){ toast('Error: '+error.message, true); return; }
+  closeModal('m-cliente'); toast('Cliente guardado ✓'); renderClientes('');
 }
 
-async function guardarServicio(){const nom=document.getElementById('s-nom').value.trim();if(!nom){toast('Ingresa el nombre',true);return}await sb.from('servicios').insert({nombre:nom,precio:parseFloat(document.getElementById('s-pre').value)||0,activo:true});_srvs=null;closeModal('m-servicio');toast('Servicio agregado ✓');renderAdmin()}
-async function toggleServicio(id,activo){await sb.from('servicios').update({activo:!activo}).eq('id',id);_srvs=null;toast(activo?'Inactivado':'Activado ✓');renderAdmin()}
-async function guardarCanal(){const nom=document.getElementById('cn-nom').value.trim();if(!nom){toast('Ingresa el nombre',true);return}await sb.from('canales').insert({nombre:nom,activo:true});_cans=null;closeModal('m-canal');toast('Canal agregado ✓');renderAdmin()}
-async function toggleCanal(id,activo){await sb.from('canales').update({activo:!activo}).eq('id',id);_cans=null;toast(activo?'Inactivado':'Activado ✓');renderAdmin()}
-async function guardarCargo(){const nom=document.getElementById('cg-nom').value.trim();if(!nom){toast('Ingresa el nombre',true);return}await sb.from('cargos').insert({nombre:nom,activo:true});_cars=null;closeModal('m-cargo');toast('Cargo agregado ✓');renderAdmin()}
-async function toggleCargo(id,activo){await sb.from('cargos').update({activo:!activo}).eq('id',id);_cars=null;toast(activo?'Inactivado':'Activado ✓');renderAdmin()}
-async function confirmarCita(id){await sb.from('citas').update({estado:'confirmada'}).eq('id',id);toast('Cita confirmada ✓');renderAgenda()}
-async function cancelarCita(id){if(!confirm('¿Cancelar esta cita?'))return;await sb.from('citas').update({estado:'cancelada'}).eq('id',id);toast('Cita cancelada');renderAgenda()}
-async function cobrar(id){await sb.from('ventas').update({estado:'pagado'}).eq('id',id);toast('Cobrada ✓');renderVentas('hoy')}
+async function editarCliente(id){
+  const { data: c } = await sb.from('clientes').select('*').eq('id',id).single();
+  if (!c) return;
+  await openModal('m-cliente');
+  g('cli-modal-title').textContent = 'Editar cliente';
+  g('cli-edit-id').value = id;
+  g('cli-id-bar').style.display = 'block';
+  g('cli-id-val').textContent = c.cliente_id || '—';
+  ['cli-nom','cli-tel','cli-email','cli-dui','cli-placa','cli-veh','cli-dir'].forEach(fid => {
+    const field = fid.replace('cli-','');
+    const map = {'nom':'nombre','tel':'tel','email':'email','dui':'dui','placa':'placa','veh':'vehiculo','dir':'direccion'};
+    const el = g(fid); if(el) el.value = c[map[field]] || '';
+  });
+  if (c.referido_por_empleado_id) g('cli-ref').value = c.referido_por_empleado_id;
+  g('btn-cli').textContent = 'Actualizar cliente';
+  g('btn-cli').onclick = () => actualizarCliente(id);
+}
 
-// ===== RENDERS =====
+async function actualizarCliente(id){
+  const nom = gv('cli-nom').trim(); if (!nom){ toast('Ingresa el nombre', true); return; }
+  const placa = gv('cli-placa').trim().toUpperCase() || null;
+  if (placa){ const {data:dup}=await sb.from('clientes').select('id').eq('placa',placa).neq('id',id); if(dup?.length>0){ toast(`Placa ${placa} ya registrada con otro cliente`,true); return; } }
+  setBtn('btn-cli', true);
+  const { error } = await sb.from('clientes').update({ nombre:nom, tel:gv('cli-tel')||null, email:gv('cli-email')||null, dui:gv('cli-dui')||null, placa, vehiculo:gv('cli-veh')||null, direccion:gv('cli-dir')||null, referido_por_empleado_id:parseInt(gv('cli-ref'))||null }).eq('id',id);
+  setBtn('btn-cli', false); if (error){ toast('Error: '+error.message, true); return; }
+  closeModal('m-cliente'); toast('Cliente actualizado ✓'); renderClientes('');
+}
+
+async function toggleCliente(id, activo){ await sb.from('clientes').update({activo:!activo}).eq('id',id); toast(activo?'Cliente inactivado':'Cliente activado ✓'); renderClientes(''); }
+
+async function guardarServicio(){
+  const nom=gv('srv-nom').trim(); if(!nom){toast('Ingresa el nombre',true);return;}
+  await sb.from('servicios').insert({nombre:nom,precio:parseFloat(gv('srv-pre'))||0,activo:true});
+  _srvs=null; closeModal('m-servicio'); toast('Servicio agregado ✓'); renderAdmin();
+}
+async function toggleServicio(id,activo){ await sb.from('servicios').update({activo:!activo}).eq('id',id); _srvs=null; toast(activo?'Inactivado':'Activado ✓'); renderAdmin(); }
+async function editarServicio(id,nom,pre){
+  g('srv-nom-'+id).innerHTML=`<input class="edit-fi" id="ei-snom-${id}" value="${nom}" style="width:130px"/>`;
+  g('srv-pre-'+id).innerHTML=`<input class="edit-fi" id="ei-spre-${id}" value="${pre}" type="number" style="width:70px"/>`;
+  const btn=g('srv-edit-btn-'+id); if(btn){btn.textContent='💾 Guardar';btn.onclick=()=>saveServicio(id);}
+}
+async function saveServicio(id){
+  const nom=g('ei-snom-'+id)?.value.trim(); const pre=parseFloat(g('ei-spre-'+id)?.value||0);
+  if(!nom){toast('Nombre requerido',true);return;}
+  await sb.from('servicios').update({nombre:nom,precio:pre}).eq('id',id);
+  _srvs=null; toast('Servicio actualizado ✓'); renderAdmin();
+}
+
+async function guardarCanal(){
+  const nom=gv('can-nom').trim(); if(!nom){toast('Ingresa el nombre',true);return;}
+  await sb.from('canales').insert({nombre:nom,activo:true});
+  _cans=null; closeModal('m-canal'); toast('Canal agregado ✓'); renderAdmin();
+}
+async function toggleCanal(id,activo){ await sb.from('canales').update({activo:!activo}).eq('id',id); _cans=null; toast(activo?'Inactivado':'Activado ✓'); renderAdmin(); }
+
+async function guardarCargo(){
+  const nom=gv('car-nom').trim(); if(!nom){toast('Ingresa el nombre',true);return;}
+  await sb.from('cargos').insert({nombre:nom,activo:true});
+  _cars=null; closeModal('m-cargo'); toast('Cargo agregado ✓'); renderAdmin();
+}
+async function toggleCargo(id,activo){ await sb.from('cargos').update({activo:!activo}).eq('id',id); _cars=null; toast(activo?'Inactivado':'Activado ✓'); renderAdmin(); }
+
+async function guardarUsuario(){
+  const email=gv('usr-email').trim().toLowerCase(); if(!email){toast('Ingresa el email',true);return;}
+  setBtn('btn-usr',true);
+  const {error}=await sb.from('usuarios').insert({email,nombre:gv('usr-nom').trim(),rol:gv('usr-rol'),activo:true});
+  setBtn('btn-usr',false); if(error){toast('Error: '+error.message,true);return;}
+  closeModal('m-usuario'); toast('Usuario agregado ✓'); renderUsuarios();
+}
+async function toggleRol(id,rolActual){ await sb.from('usuarios').update({rol:rolActual==='admin'?'encargado':'admin'}).eq('id',id); toast('Rol actualizado ✓'); renderUsuarios(); }
+async function toggleUsuario(id,activo){ await sb.from('usuarios').update({activo:!activo}).eq('id',id); toast(activo?'Usuario inactivado':'Usuario activado ✓'); renderUsuarios(); }
+
+// ══════════════════════════════════════════════
+// ACCIONES EN TABLA
+// ══════════════════════════════════════════════
+async function cobrar(id){ await sb.from('ventas').update({estado:'pagado'}).eq('id',id); toast('Cobrada ✓'); renderVentas('hoy'); }
+async function confirmarCita(id){ await sb.from('citas').update({estado:'confirmada'}).eq('id',id); toast('Cita confirmada ✓'); renderAgenda(); }
+async function cancelarCita(id){ if(!confirm('¿Cancelar esta cita?'))return; await sb.from('citas').update({estado:'cancelada'}).eq('id',id); toast('Cita cancelada'); renderAgenda(); }
+
+// ══════════════════════════════════════════════
+// RENDERS
+// ══════════════════════════════════════════════
 async function renderDashboard(){
-  const now=new Date();
-  document.getElementById('dash-fecha').textContent=now.toLocaleDateString('es-SV',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const today=todayStr(),monday=weekDay(0);
-  const[{data:vH},{data:vS},{data:cH}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',today+'T00:00:00').order('created_at',{ascending:false}),sb.from('ventas').select('*').gte('created_at',monday+'T00:00:00'),sb.from('citas').select('*,empleados(nombre,color_idx)').eq('fecha',today).order('hora')]);
-  const emps=await getEmps();const empMap=Object.fromEntries(emps.map((e,i)=>[e.id,{...e,idx:e.color_idx??i}]));
-  const ing=(vH||[]).reduce((a,v)=>a+parseFloat(v.precio),0);
-  document.getElementById('dash-metrics').innerHTML=`<div class="metric"><div class="ml">Ingresos hoy</div><div class="mv">$${ing.toFixed(0)}</div><div class="md">${(vH||[]).length} servicios</div></div><div class="metric"><div class="ml">Pendientes</div><div class="mv">${(vH||[]).filter(v=>v.estado==='pendiente').length}</div><div class="md neu">por cobrar</div></div><div class="metric"><div class="ml">Citas hoy</div><div class="mv">${(cH||[]).length}</div><div class="md">${(cH||[]).filter(c=>c.estado==='confirmada').length} confirmadas</div></div><div class="metric"><div class="ml">Ventas semana</div><div class="mv">$${(vS||[]).reduce((a,v)=>a+parseFloat(v.precio),0).toFixed(0)}</div><div class="md neu">${(vS||[]).length} servicios</div></div>`;
-  const dias=['L','M','X','J','V','S'];const wd=[0,1,2,3,4,5].map(i=>{const ds=weekDay(i);return(vS||[]).filter(v=>v.created_at.startsWith(ds)).reduce((a,v)=>a+parseFloat(v.precio),0)});
-  const mx=Math.max(...wd,1);const ti=(now.getDay()===0?6:now.getDay()-1);
-  document.getElementById('dash-chart').innerHTML=wd.map((val,i)=>`<div class="bw"><div class="bb2 ${i===ti?'hi':''}" style="height:${Math.round(val/mx*60)+4}px"></div><div class="bday">${dias[i]}</div></div>`).join('');
-  document.getElementById('dash-citas').innerHTML=(cH||[]).length?(cH||[]).map(c=>{const idx=parseInt(c.empleados?.color_idx??0);return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--fh);font-weight:600;color:${ec(idx)};min-width:65px">${c.hora}</div><div style="flex:1"><div style="color:var(--text)">${c.cliente_nombre}</div><div style="font-size:11px;color:var(--text3)">${c.servicio}</div></div>${bdg(c.estado==='confirmada'?'g':'a',c.estado)}</div>`;}).join(''):'<div style="color:var(--text3);font-size:12px;padding:16px 0">Sin citas para hoy</div>';
-  document.getElementById('dash-vtb').innerHTML=(vH||[]).slice(0,6).map(v=>{const emp=empMap[v.empleado_id]||{nombre:'—',idx:0};return `<tr><td>${fmtTime(v.created_at)}</td><td><strong>${v.cliente_nombre}</strong></td><td>${v.servicio}</td><td><span style="color:${ec(emp.idx||0)}">${emp.nombre}</span></td><td><strong style="color:var(--green)">$${parseFloat(v.precio).toFixed(2)}</strong></td><td>${bdg(v.estado==='pagado'?'g':'a',v.estado)}</td></tr>`;}).join('')||'<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text3)">Sin ventas hoy</td></tr>';
+  const now = new Date();
+  g('dash-fecha').textContent = now.toLocaleDateString('es-SV',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const today=todayStr(), monday=weekDay(0);
+  const [{data:vH},{data:vS},{data:cH}] = await Promise.all([
+    sb.from('ventas').select('*').gte('created_at',today+'T00:00:00').order('created_at',{ascending:false}),
+    sb.from('ventas').select('*').gte('created_at',monday+'T00:00:00'),
+    sb.from('citas').select('*,empleados(nombre,color_idx)').eq('fecha',today).order('hora')
+  ]);
+  const emps = await getEmps();
+  const empMap = Object.fromEntries(emps.map((e,i)=>[e.id,{...e,idx:e.color_idx??i}]));
+  const ing = (vH||[]).reduce((a,v)=>a+parseFloat(v.precio),0);
+
+  g('dash-metrics').innerHTML = `
+    <div class="metric"><div class="ml">Ingresos hoy</div><div class="mv">$${ing.toFixed(0)}</div><div class="md">${(vH||[]).length} servicios</div></div>
+    <div class="metric"><div class="ml">Pendientes</div><div class="mv">${(vH||[]).filter(v=>v.estado==='pendiente').length}</div><div class="md neu">por cobrar</div></div>
+    <div class="metric"><div class="ml">Citas hoy</div><div class="mv">${(cH||[]).length}</div><div class="md">${(cH||[]).filter(c=>c.estado==='confirmada').length} confirmadas</div></div>
+    <div class="metric"><div class="ml">Ventas semana</div><div class="mv">$${(vS||[]).reduce((a,v)=>a+parseFloat(v.precio),0).toFixed(0)}</div><div class="md neu">${(vS||[]).length} servicios</div></div>`;
+
+  const dias=['L','M','X','J','V','S'];
+  const wd=[0,1,2,3,4,5].map(i=>{ const ds=weekDay(i); return (vS||[]).filter(v=>v.created_at.startsWith(ds)).reduce((a,v)=>a+parseFloat(v.precio),0); });
+  const mx=Math.max(...wd,1), ti=now.getDay()===0?6:now.getDay()-1;
+  g('dash-chart').innerHTML = wd.map((val,i)=>`<div class="bar-wrap"><div class="bar-col ${i===ti?'hi':''}" style="height:${Math.round(val/mx*60)+4}px"></div><div class="bar-lbl">${dias[i]}</div></div>`).join('');
+
+  g('dash-citas').innerHTML = (cH||[]).length
+    ? (cH||[]).map(c=>{ const idx=parseInt(c.empleados?.color_idx??0); return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--fh);font-weight:600;color:${ec(idx)};min-width:65px">${c.hora}</div><div style="flex:1"><div style="color:var(--text)">${c.cliente_nombre}</div><div style="font-size:11px;color:var(--text3)">${c.servicio}</div></div>${bdg(c.estado==='confirmada'?'g':'a',c.estado)}</div>`; }).join('')
+    : '<div style="color:var(--text3);font-size:12px;padding:16px 0">Sin citas para hoy</div>';
+
+  g('dash-vtb').innerHTML = (vH||[]).slice(0,6).map(v=>{ const emp=empMap[v.empleado_id]||{nombre:'—',idx:0}; return `<tr><td>${fmtTime(v.created_at)}</td><td><strong>${v.cliente_nombre}</strong></td><td>${v.servicio}</td><td><span style="color:${ec(emp.idx||0)}">${emp.nombre}</span></td><td>${PIMAP[v.metodo_pago||'efectivo']||'💵'}</td><td><strong style="color:var(--green)">$${parseFloat(v.precio).toFixed(2)}</strong></td><td>${bdg(v.estado==='pagado'?'g':'a',v.estado)}</td></tr>`; }).join('') || `<tr><td colspan="7" class="empty-row">Sin ventas hoy</td></tr>`;
 }
 
 async function renderVentas(periodo='hoy'){
-  let from=todayStr();if(periodo==='semana')from=weekDay(0);else if(periodo==='mes'){const d=new Date();from=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`}
-  const[{data:ventas},emps,{data:promos}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',from+'T00:00:00').order('created_at',{ascending:false}),getEmps(),sb.from('promociones').select('id,nombre')]);
-  const em=Object.fromEntries(emps.map((e,i)=>[e.id,{...e,idx:e.color_idx??i}]));const pm=Object.fromEntries((promos||[]).map(p=>[p.id,p]));
+  let from=todayStr();
+  if(periodo==='semana') from=weekDay(0);
+  else if(periodo==='mes'){ const d=new Date(); from=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; }
+  const [{data:ventas},emps,{data:promos}] = await Promise.all([
+    sb.from('ventas').select('*').gte('created_at',from+'T00:00:00').order('created_at',{ascending:false}),
+    getEmps(),
+    sb.from('promociones').select('id,nombre')
+  ]);
+  const em=Object.fromEntries(emps.map((e,i)=>[e.id,{...e,idx:e.color_idx??i}]));
+  const pm=Object.fromEntries((promos||[]).map(p=>[p.id,p]));
   const ing=(ventas||[]).reduce((a,v)=>a+parseFloat(v.precio),0);
-  const ef=(ventas||[]).filter(v=>(v.metodo_pago||'efectivo')==='efectivo').reduce((a,v)=>a+parseFloat(v.precio),0);
+  const ef =(ventas||[]).filter(v=>(v.metodo_pago||'efectivo')==='efectivo').reduce((a,v)=>a+parseFloat(v.precio),0);
   const tr2=(ventas||[]).filter(v=>v.metodo_pago==='transferencia').reduce((a,v)=>a+parseFloat(v.precio),0);
-  const tc=(ventas||[]).filter(v=>v.metodo_pago==='tarjeta').reduce((a,v)=>a+parseFloat(v.precio),0);
-  document.getElementById('v-metrics').innerHTML=`
-    <div class="metric"><div class="ml">Ingresos totales</div><div class="mv">$${ing.toFixed(0)}</div><div class="md">${(ventas||[]).length} servicios</div></div>
+  const tc =(ventas||[]).filter(v=>v.metodo_pago==='tarjeta').reduce((a,v)=>a+parseFloat(v.precio),0);
+
+  g('v-metrics').innerHTML = `
+    <div class="metric"><div class="ml">💰 Total</div><div class="mv">$${ing.toFixed(0)}</div><div class="md">${(ventas||[]).length} servicios</div></div>
     <div class="metric"><div class="ml">💵 Efectivo</div><div class="mv">$${ef.toFixed(0)}</div><div class="md neu">${(ventas||[]).filter(v=>(v.metodo_pago||'efectivo')==='efectivo').length} pagos</div></div>
     <div class="metric"><div class="ml">📱 Transferencia</div><div class="mv">$${tr2.toFixed(0)}</div><div class="md neu">${(ventas||[]).filter(v=>v.metodo_pago==='transferencia').length} pagos</div></div>
     <div class="metric"><div class="ml">💳 Tarjeta</div><div class="mv">$${tc.toFixed(0)}</div><div class="md neu">${(ventas||[]).filter(v=>v.metodo_pago==='tarjeta').length} pagos</div></div>`;
-  const pagoIcon={efectivo:'💵',transferencia:'📱',tarjeta:'💳'};
-  document.getElementById('v-tbody').innerHTML=(ventas||[]).map(v=>{
-    const emp=em[v.empleado_id]||{nombre:'—',idx:0};
-    const pro=v.promo_id?pm[v.promo_id]:null;
-    return `<tr>
-      <td>${fmtTime(v.created_at)}</td>
-      <td><strong>${v.cliente_nombre}</strong></td>
-      <td style="color:var(--text3)">${v.vehiculo||'—'}</td>
-      <td>${v.servicio}</td>
-      <td><span style="color:${ec(emp.idx||0)}">${emp.nombre}</span></td>
-      <td>${pro?`<span class="ref-pill">${pro.nombre}</span>`:'—'}</td>
-      <td><span title="${v.metodo_pago||'efectivo'}">${pagoIcon[v.metodo_pago||'efectivo']||'💵'}</span> <strong style="color:var(--green)">$${parseFloat(v.precio).toFixed(2)}</strong></td>
-      <td>${bdg(v.estado==='pagado'?'g':'a',v.estado)}</td>
-      <td>${v.estado==='pendiente'?`<button class="btn bsm bp" onclick="cobrar(${v.id})">Cobrar</button>`:''}</td>
-    </tr>`;}).join('')||'<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text3)">Sin ventas en este período</td></tr>';
+
+  g('v-tbody').innerHTML = (ventas||[]).map(v=>{ const emp=em[v.empleado_id]||{nombre:'—',idx:0}; const pro=v.promo_id?pm[v.promo_id]:null; return `<tr><td>${fmtTime(v.created_at)}</td><td><strong>${v.cliente_nombre}</strong></td><td>${v.servicio}</td><td><span style="color:${ec(emp.idx||0)}">${emp.nombre}</span></td><td>${pro?`<span class="ref-pill">${pro.nombre}</span>`:'—'}</td><td>${PIMAP[v.metodo_pago||'efectivo']||'💵'} <span style="font-size:10px;color:var(--text3)">${v.metodo_pago||'efectivo'}</span></td><td><strong style="color:var(--green)">$${parseFloat(v.precio).toFixed(2)}</strong></td><td>${bdg(v.estado==='pagado'?'g':'a',v.estado)}</td><td>${v.estado==='pendiente'?`<button class="btn bsm bp" onclick="cobrar(${v.id})">Cobrar</button>`:''}</td></tr>`; }).join('') || `<tr><td colspan="9" class="empty-row">Sin ventas en este período</td></tr>`;
 }
 
 async function renderAgenda(){
-  const emps=await getEmps();const{data:citas}=await sb.from('citas').select('*,empleados(nombre,color_idx)').order('fecha').order('hora');
-  document.getElementById('ag-leg').innerHTML=emps.filter(e=>e.activo).slice(0,4).map((e,i)=>`<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:50%;background:${ec(e.color_idx??i)}"></span>${e.nombre.split(' ')[0]}</span>`).join('');
-  const dias=['LUN','MAR','MIÉ','JUE','VIE','SÁB'];const now=new Date();
-  document.getElementById('ag-week').innerHTML=[0,1,2,3,4,5].map(i=>{const ds=weekDay(i);const d=new Date(ds+'T12:00:00');const isT=ds===todayStr();const dc=(citas||[]).filter(c=>c.fecha===ds);const slots=dc.length?dc.map(c=>{const idx=parseInt(c.empleados?.color_idx??0);return `<div class="slot ${SLOTC[idx%4]}" onclick="confirmarCita(${c.id})"><div style="font-size:9px;opacity:.7">${c.hora}</div><div style="font-weight:500">${c.cliente_nombre}</div><div style="font-size:9px;opacity:.7">${c.servicio}</div></div>`;}).join(''):`<div class="slot sf3">Libre</div>`;return `<div><div class="dh ${isT?'today':''}">${dias[i]} ${d.getDate()}</div>${slots}</div>`;}).join('');
+  const emps=await getEmps();
+  const {data:citas}=await sb.from('citas').select('*,empleados(nombre,color_idx)').order('fecha').order('hora');
+  const activos=emps.filter(e=>e.activo);
+  g('ag-leg').innerHTML = activos.slice(0,4).map((e,i)=>`<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)"><span style="width:8px;height:8px;border-radius:50%;background:${ec(e.color_idx??i)}"></span>${e.nombre.split(' ')[0]}</span>`).join('');
+  const dias=['LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+  g('ag-week').innerHTML = [0,1,2,3,4,5].map(i=>{ const ds=weekDay(i),d=new Date(ds+'T12:00:00'),isT=ds===todayStr(); const dc=(citas||[]).filter(c=>c.fecha===ds); const slots=dc.length?dc.map(c=>{ const idx=parseInt(c.empleados?.color_idx??0); return `<div class="ag-slot ${AGCLS[idx%4]}" onclick="confirmarCita(${c.id})"><div style="font-size:9px;opacity:.7">${c.hora}</div><div style="font-weight:500">${c.cliente_nombre}</div><div style="font-size:9px;opacity:.7">${c.servicio}</div></div>`; }).join(''):`<div class="ag-slot ag-free">Libre</div>`; return `<div><div class="ag-hd ${isT?'today':''}">${dias[i]} ${d.getDate()}</div>${slots}</div>`; }).join('');
   const em=Object.fromEntries(emps.map((e,i)=>[e.id,{...e,idx:e.color_idx??i}]));
-  document.getElementById('citas-tb').innerHTML=(citas||[]).map(c=>{const emp=em[c.empleado_id]||{nombre:'—',idx:0};return `<tr><td>${fmtDate(c.fecha)}</td><td>${c.hora}</td><td><strong>${c.cliente_nombre}</strong><br><span style="font-size:10px;color:var(--text3)">${c.cliente_tel||''}</span></td><td>${c.servicio}</td><td><span style="color:${ec(emp.idx)}">${emp.nombre}</span></td><td>${bdg('b',c.canal)}</td><td>${bdg(c.estado==='confirmada'?'g':c.estado==='cancelada'?'r':'a',c.estado)}</td><td style="display:flex;gap:4px">${c.estado==='pendiente'?`<button class="btn bsm" onclick="confirmarCita(${c.id})">Confirmar</button>`:''}${c.estado!=='cancelada'?`<button class="btn bsm bd" onclick="cancelarCita(${c.id})">✕</button>`:''}</td></tr>`;}).join('')||'<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text3)">Sin citas</td></tr>';
+  g('citas-tb').innerHTML = (citas||[]).map(c=>{ const emp=em[c.empleado_id]||{nombre:'—',idx:0}; return `<tr><td>${fmtDate(c.fecha)}</td><td>${c.hora}</td><td><strong>${c.cliente_nombre}</strong><br><span style="font-size:10px;color:var(--text3)">${c.cliente_tel||''}</span></td><td>${c.servicio}</td><td><span style="color:${ec(emp.idx)}">${emp.nombre}</span></td><td>${bdg('b',c.canal)}</td><td>${bdg(c.estado==='confirmada'?'g':c.estado==='cancelada'?'r':'a',c.estado)}</td><td style="display:flex;gap:4px">${c.estado==='pendiente'?`<button class="btn bsm" onclick="confirmarCita(${c.id})">Confirmar</button>`:''}${c.estado!=='cancelada'?`<button class="btn bsm bd" onclick="cancelarCita(${c.id})">✕</button>`:''}</td></tr>`; }).join('') || `<tr><td colspan="8" class="empty-row">Sin citas</td></tr>`;
 }
 
 async function renderEmpleados(){
-  const{data:todos}=await sb.from('empleados').select('*').order('nombre');const emps=todos||[];
-  const now=new Date();const from=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
-  const[{data:ventas},{data:reglas}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',from+'T00:00:00'),sb.from('reglas_bonos').select('*').eq('activa',true)]);
-  document.getElementById('emp-list').innerHTML=emps.map((e,i)=>{const idx=e.color_idx??i;return `<div class="er" style="${!e.activo?'opacity:.45':''}"><div class="av" style="background:${eb(idx)};color:${ec(idx)}">${e.iniciales||'?'}</div><div class="ei"><div class="en">${e.nombre}</div><div class="em2">${e.cargo} · ${e.tel||'—'} · $${parseFloat(e.salario||0).toFixed(0)}/mes</div></div>${bdg(e.activo?'g':'r',e.activo?'activo':'inactivo')}<button class="btn bsm ${e.activo?'bd':'bamb'}" style="margin-left:8px" onclick="${e.activo?`inactivarEmp(${e.id})`:`reactivarEmp(${e.id})`}">${e.activo?'Inactivar':'Activar'}</button></div>`;}).join('');
-  const activos=emps.filter(e=>e.activo);const metaS=((reglas||[]).find(r=>r.tipo==='servicios')?.meta)||40;
-  document.getElementById('emp-stats').innerHTML=activos.map((e,i)=>{const idx=e.color_idx??i;const ev=(ventas||[]).filter(v=>v.empleado_id===e.id);const total=ev.reduce((a,v)=>a+parseFloat(v.precio),0);const refs=(ventas||[]).filter(v=>v.referido_empleado_id===e.id).length;let bono=0;(reglas||[]).forEach(r=>{if(r.tipo==='servicios'&&ev.length>=r.meta)bono+=parseFloat(r.bono);if(r.tipo==='meta'&&total>=r.meta)bono+=parseFloat(r.bono);if(r.tipo==='referido')bono+=refs*parseFloat(r.bono)});return `<tr><td><span style="color:${ec(idx)}">${e.nombre}</span></td><td><strong>${ev.length}</strong></td><td><strong style="color:var(--green)">$${total.toFixed(0)}</strong></td><td>${refs}</td><td><strong style="color:${bono>0?'var(--green)':'var(--text2)'}">${bono>0?'$'+bono.toFixed(0):'—'}</strong></td></tr>`;}).join('');
+  const {data:todos}=await sb.from('empleados').select('*').order('nombre');
+  const emps=todos||[];
+  const now=new Date(), from=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
+  const [{data:ventas},{data:reglas}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',from+'T00:00:00'),sb.from('reglas_bonos').select('*').eq('activa',true)]);
+  g('emp-list').innerHTML = emps.map((e,i)=>{ const idx=e.color_idx??i; return `<div class="er" style="${!e.activo?'opacity:.45':''}"><div class="av" style="background:${eb(idx)};color:${ec(idx)}">${e.iniciales||'?'}</div><div class="ei"><div class="en">${e.nombre}</div><div class="em2">${e.cargo} · ${e.tel||'—'} · $${parseFloat(e.salario||0).toFixed(0)}/mes</div></div>${bdg(e.activo?'g':'r',e.activo?'activo':'inactivo')}<button class="btn bsm ${e.activo?'bd':'bamb'}" style="margin-left:8px" onclick="toggleEmp(${e.id},${e.activo})">${e.activo?'Inactivar':'Activar'}</button></div>`; }).join('');
+  const activos=emps.filter(e=>e.activo), metaS=((reglas||[]).find(r=>r.tipo==='servicios')?.meta)||40;
+  g('emp-stats').innerHTML = activos.map((e,i)=>{ const idx=e.color_idx??i; const ev=(ventas||[]).filter(v=>v.empleado_id===e.id); const total=ev.reduce((a,v)=>a+parseFloat(v.precio),0); const refs=(ventas||[]).filter(v=>v.referido_empleado_id===e.id).length; let bono=0; (reglas||[]).forEach(r=>{ if(r.tipo==='servicios'&&ev.length>=r.meta)bono+=parseFloat(r.bono); if(r.tipo==='meta'&&total>=r.meta)bono+=parseFloat(r.bono); if(r.tipo==='referido')bono+=refs*parseFloat(r.bono); }); return `<tr><td><span style="color:${ec(idx)}">${e.nombre}</span></td><td><strong>${ev.length}</strong></td><td><strong style="color:var(--green)">$${total.toFixed(0)}</strong></td><td>${refs}</td><td><strong style="color:${bono>0?'var(--green)':'var(--text2)'}">${bono>0?'$'+bono.toFixed(0):'—'}</strong></td></tr>`; }).join('');
 }
 
 async function renderBonos(){
   const emps=(await getEmps()).filter(e=>e.activo);
-  const now=new Date();const from=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
-  const[{data:ventas},{data:reglas}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',from+'T00:00:00'),sb.from('reglas_bonos').select('*').order('created_at')]);
+  const now=new Date(), from=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
+  const [{data:ventas},{data:reglas}]=await Promise.all([sb.from('ventas').select('*').gte('created_at',from+'T00:00:00'),sb.from('reglas_bonos').select('*').order('created_at')]);
   const metaS=((reglas||[]).filter(r=>r.activa).find(r=>r.tipo==='servicios')?.meta)||40;
-  document.getElementById('bonos-emps').innerHTML=emps.map((e,i)=>{const idx=e.color_idx??i;const ev=(ventas||[]).filter(v=>v.empleado_id===e.id);const total=ev.reduce((a,v)=>a+parseFloat(v.precio),0);const refs=(ventas||[]).filter(v=>v.referido_empleado_id===e.id).length;let bono=0;(reglas||[]).filter(r=>r.activa).forEach(r=>{if(r.tipo==='servicios'&&ev.length>=r.meta)bono+=parseFloat(r.bono);if(r.tipo==='meta'&&total>=r.meta)bono+=parseFloat(r.bono);if(r.tipo==='referido')bono+=refs*parseFloat(r.bono)});const pct=Math.min(Math.round(ev.length/metaS*100),100);return `<div class="er"><div class="av" style="background:${eb(idx)};color:${ec(idx)}">${e.iniciales||'?'}</div><div class="ei"><div class="en">${e.nombre}</div><div class="em2">${ev.length} servicios · $${total.toFixed(0)} ventas · ${refs} referidos</div><div style="font-size:10px;color:var(--text3);margin-top:6px">${ev.length} / ${metaS} servicios (${pct}%)</div><div class="pb" style="margin-top:4px"><div class="pf" style="width:${pct}%"></div></div></div><div class="ebo"><div class="bamt">${bono>0?'$'+bono.toFixed(0):'—'}</div><div class="blbl">bono estimado</div></div></div>`;}).join('');
-  document.getElementById('reglas-tb').innerHTML=(reglas||[]).map(r=>`<tr><td>${bdg(r.tipo==='servicios'?'b':r.tipo==='meta'?'g':'a',r.tipo)}</td><td>${r.descripcion}</td><td>${r.tipo==='meta'?'$':''}${parseFloat(r.meta).toFixed(0)}</td><td><strong style="color:var(--green)">$${parseFloat(r.bono).toFixed(0)}</strong></td><td>${bdg(r.activa?'g':'r',r.activa?'activa':'inactiva')}</td><td><button class="btn bsm ${r.activa?'bd':'bamb'}" onclick="toggleRegla(${r.id},${r.activa})">${r.activa?'Inactivar':'Activar'}</button></td></tr>`).join('');
+  g('bonos-emps').innerHTML = emps.map((e,i)=>{ const idx=e.color_idx??i; const ev=(ventas||[]).filter(v=>v.empleado_id===e.id); const total=ev.reduce((a,v)=>a+parseFloat(v.precio),0); const refs=(ventas||[]).filter(v=>v.referido_empleado_id===e.id).length; let bono=0; (reglas||[]).filter(r=>r.activa).forEach(r=>{ if(r.tipo==='servicios'&&ev.length>=r.meta)bono+=parseFloat(r.bono); if(r.tipo==='meta'&&total>=r.meta)bono+=parseFloat(r.bono); if(r.tipo==='referido')bono+=refs*parseFloat(r.bono); }); const pct=Math.min(Math.round(ev.length/metaS*100),100); return `<div class="er"><div class="av" style="background:${eb(idx)};color:${ec(idx)}">${e.iniciales||'?'}</div><div class="ei"><div class="en">${e.nombre}</div><div class="em2">${ev.length} servicios · $${total.toFixed(0)} ventas · ${refs} referidos</div><div style="font-size:10px;color:var(--text3);margin-top:6px">${ev.length} / ${metaS} servicios (${pct}%)</div><div class="pb" style="margin-top:4px"><div class="pf" style="width:${pct}%"></div></div></div><div class="bono-box"><div class="bono-amt">${bono>0?'$'+bono.toFixed(0):'—'}</div><div class="bono-lbl">bono estimado</div></div></div>`; }).join('');
+  g('reglas-tb').innerHTML = (reglas||[]).map(r=>`<tr><td>${bdg(r.tipo==='servicios'?'b':r.tipo==='meta'?'g':'a',r.tipo)}</td><td>${r.descripcion}</td><td>${r.tipo==='meta'?'$':''}${parseFloat(r.meta).toFixed(0)}</td><td><strong style="color:var(--green)">$${parseFloat(r.bono).toFixed(0)}</strong></td><td>${bdg(r.activa?'g':'r',r.activa?'activa':'inactiva')}</td><td><button class="btn bsm ${r.activa?'bd':'bamb'}" onclick="toggleRegla(${r.id},${r.activa})">${r.activa?'Inactivar':'Activar'}</button></td></tr>`).join('');
 }
 
 async function renderPromociones(){
-  const{data:promos}=await sb.from('promociones').select('*').order('activa',{ascending:false}).order('created_at',{ascending:false});
-  const act=(promos||[]).filter(p=>p.activa),ina=(promos||[]).filter(p=>!p.activa);
+  const {data:promos}=await sb.from('promociones').select('*').order('activa',{ascending:false}).order('created_at',{ascending:false});
+  const act=(promos||[]).filter(p=>p.activa), ina=(promos||[]).filter(p=>!p.activa);
   const icons={pct:'%','2x1':'2×',fijo:'$'};
-  const rp=p=>`<div class="pi" style="${!p.activa?'opacity:.5':''}"><div class="piico" style="background:${p.activa?'var(--gdim)':'var(--bg3)'};color:${p.activa?'var(--green)':'var(--text3)'}">${icons[p.tipo]||'★'}</div><div class="pinf"><div class="pnm">${p.nombre}</div><div class="pdt">${p.tipo==='pct'?p.valor+'%':p.tipo==='fijo'?'$'+p.valor:'2×1'} · ${fmtDate(p.desde)} – ${fmtDate(p.hasta)} · ${p.usos} usos</div></div><button class="btn bsm ${p.activa?'bd':'bamb'}" onclick="togglePromo(${p.id},${p.activa})">${p.activa?'Inactivar':'Activar'}</button></div>`;
-  document.getElementById('promos-act').innerHTML=act.map(rp).join('')||'<div style="color:var(--text3);font-size:12px;padding:8px 0">Sin promociones activas</div>';
-  document.getElementById('promos-ina').innerHTML=ina.map(rp).join('')||'<div style="color:var(--text3);font-size:12px;padding:8px 0">Ninguna</div>';
-  document.getElementById('promos-imp').innerHTML=(promos||[]).sort((a,b)=>b.usos-a.usos).map(p=>`<tr><td>${p.nombre}</td><td><strong>${p.usos}</strong></td></tr>`).join('');
+  const rp=p=>`<div class="promo-card" style="${!p.activa?'opacity:.5':''}"><div class="promo-ico" style="background:${p.activa?'var(--gdim)':'var(--bg3)'};color:${p.activa?'var(--green)':'var(--text3)'}">${icons[p.tipo]||'★'}</div><div class="promo-info"><div class="promo-nm">${p.nombre}</div><div class="promo-dt">${p.tipo==='pct'?p.valor+'%':p.tipo==='fijo'?'$'+p.valor:'2×1'} · ${fmtDate(p.desde)} – ${fmtDate(p.hasta)} · ${p.usos} usos</div></div><button class="btn bsm ${p.activa?'bd':'bamb'}" onclick="togglePromo(${p.id},${p.activa})">${p.activa?'Inactivar':'Activar'}</button></div>`;
+  g('promos-act').innerHTML = act.map(rp).join('') || '<div style="color:var(--text3);font-size:12px;padding:8px 0">Sin promociones activas</div>';
+  g('promos-ina').innerHTML = ina.map(rp).join('') || '<div style="color:var(--text3);font-size:12px;padding:8px 0">Ninguna</div>';
+  g('promos-imp').innerHTML = (promos||[]).sort((a,b)=>b.usos-a.usos).map(p=>`<tr><td>${p.nombre}</td><td><strong>${p.usos}</strong></td></tr>`).join('');
 }
 
 async function renderClientes(q=''){
-  const{data:clientes}=await sb.from('clientes').select('*,empleados(nombre)').order('visitas',{ascending:false});
+  const {data:clientes}=await sb.from('clientes').select('*,empleados(nombre)').order('visitas',{ascending:false});
   let fl=clientes||[];
-  if(q){
-    const ql=q.toLowerCase();
-    fl=fl.filter(c=>
-      (c.nombre||'').toLowerCase().includes(ql)||
-      (c.cliente_id||'').toLowerCase().includes(ql)||
-      (c.placa||'').toLowerCase().includes(ql)||
-      (c.tel||'').includes(q)||
-      (c.email||'').toLowerCase().includes(ql)
-    );
-  }
-  // metrics
-  const total=fl.length;
-  const activos=fl.filter(c=>c.activo!==false).length;
-  const gastoTotal=fl.reduce((a,c)=>a+parseFloat(c.gasto_total||0),0);
-  const visitas=fl.reduce((a,c)=>a+parseInt(c.visitas||0),0);
-  const mEl=document.getElementById('cl-metrics');
-  if(mEl) mEl.innerHTML=`
-    <div class="metric"><div class="ml">Total clientes</div><div class="mv">${total}</div><div class="md">${activos} activos</div></div>
-    <div class="metric"><div class="ml">Visitas totales</div><div class="mv">${visitas}</div><div class="md neu">historial</div></div>
-    <div class="metric"><div class="ml">Ingresos totales</div><div class="mv">$${gastoTotal.toFixed(0)}</div><div class="md">acumulado</div></div>
-    <div class="metric"><div class="ml">Ticket promedio</div><div class="mv">$${visitas>0?(gastoTotal/visitas).toFixed(1):'0'}</div><div class="md neu">por visita</div></div>`;
-
-  document.getElementById('cl-tb').innerHTML=fl.map(c=>`<tr>
-    <td><span style="font-family:var(--fh);color:var(--green);font-weight:600">${c.cliente_id||'—'}</span></td>
-    <td>
-      <strong>${c.nombre}</strong>
-      <br><span style="font-size:10px;color:var(--text3)">${c.vehiculo||'—'}</span>
-    </td>
-    <td style="color:var(--text3)">${c.tel||'—'}</td>
-    <td style="color:var(--text3)">${c.email||'—'}</td>
-    <td>
-      ${c.placa?`<span style="font-family:var(--fh);font-size:12px;font-weight:600;background:var(--bg3);padding:2px 8px;border-radius:4px;border:1px solid var(--border2)">${c.placa}</span>`:'—'}
-    </td>
-    <td><strong>${c.visitas||0}</strong></td>
-    <td><strong style="color:var(--green)">$${parseFloat(c.gasto_total||0).toFixed(0)}</strong></td>
-    <td>${bdg(c.activo!==false?'g':'r',c.activo!==false?'activo':'inactivo')}</td>
-    <td style="display:flex;gap:4px">
-      <button class="btn bsm" onclick="editarCliente(${c.id})">✏</button>
-      <button class="btn bsm ${c.activo!==false?'bd':'bamb'}" onclick="toggleCliente(${c.id},${c.activo!==false})">${c.activo!==false?'Inactivar':'Activar'}</button>
-    </td>
-  </tr>`).join('')||'<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text3)">Sin clientes registrados</td></tr>';
-}
-
-async function editarCliente(id){
-  const{data:c}=await sb.from('clientes').select('*').eq('id',id).single();
-  if(!c) return;
-  // populate selects first
-  const emps=await getEmps();
-  const eo=emps.filter(e=>e.activo).map(e=>`<option value="${e.id}">${e.nombre}</option>`).join('');
-  document.getElementById('cl-ref').innerHTML=`<option value="">Nadie / llegó solo</option>`+eo;
-  // fill form
-  document.getElementById('m-cliente-title').textContent='Editar cliente';
-  document.getElementById('cl-edit-id').value=id;
-  document.getElementById('cl-id-display').style.display='block';
-  document.getElementById('cl-id-val').textContent=c.cliente_id||'—';
-  document.getElementById('cl-nom').value=c.nombre||'';
-  document.getElementById('cl-tel').value=c.tel||'';
-  document.getElementById('cl-email').value=c.email||'';
-  document.getElementById('cl-dui').value=c.dui||'';
-  document.getElementById('cl-placa').value=c.placa||'';
-  document.getElementById('cl-veh').value=c.vehiculo||'';
-  document.getElementById('cl-dir').value=c.direccion||'';
-  if(c.referido_por_empleado_id) document.getElementById('cl-ref').value=c.referido_por_empleado_id;
-  document.getElementById('btn-cli').textContent='Actualizar cliente';
-  document.getElementById('btn-cli').onclick=()=>actualizarCliente(id);
-  document.getElementById('m-cliente').classList.add('open');
-}
-
-async function actualizarCliente(id){
-  const nom=document.getElementById('cl-nom').value.trim();
-  if(!nom){toast('Ingresa el nombre',true);return;}
-  const placa=(document.getElementById('cl-placa').value||'').trim().toUpperCase()||null;
-  // check placa duplicate (excluding current)
-  if(placa){
-    const{data:dup}=await sb.from('clientes').select('id').eq('placa',placa).neq('id',id);
-    if(dup&&dup.length>0){toast('Esa placa ya está registrada con otro cliente',true);return;}
-  }
-  setBtn('btn-cli',true);
-  const{error}=await sb.from('clientes').update({
-    nombre:nom, tel:document.getElementById('cl-tel').value,
-    email:document.getElementById('cl-email').value||null,
-    dui:document.getElementById('cl-dui').value||null,
-    placa, vehiculo:document.getElementById('cl-veh').value||null,
-    direccion:document.getElementById('cl-dir').value||null,
-    referido_por_empleado_id:parseInt(document.getElementById('cl-ref').value)||null
-  }).eq('id',id);
-  setBtn('btn-cli',false);
-  if(error){toast('Error: '+error.message,true);return;}
-  closeModal('m-cliente');toast('Cliente actualizado ✓');renderClientes('');
-}
-
-async function toggleCliente(id, activo){
-  await sb.from('clientes').update({activo:!activo}).eq('id',id);
-  toast(activo?'Cliente inactivado':'Cliente activado ✓');renderClientes('');
+  if(q){ const ql=q.toLowerCase(); fl=fl.filter(c=>(c.nombre||'').toLowerCase().includes(ql)||(c.cliente_id||'').toLowerCase().includes(ql)||(c.placa||'').toLowerCase().includes(ql)||(c.tel||'').includes(q)||(c.email||'').toLowerCase().includes(ql)); }
+  const gastoTot=fl.reduce((a,c)=>a+parseFloat(c.gasto_total||0),0);
+  const visitasTot=fl.reduce((a,c)=>a+parseInt(c.visitas||0),0);
+  g('cl-metrics').innerHTML = `<div class="metric"><div class="ml">Total clientes</div><div class="mv">${fl.length}</div><div class="md">${fl.filter(c=>c.activo!==false).length} activos</div></div><div class="metric"><div class="ml">Visitas totales</div><div class="mv">${visitasTot}</div><div class="md neu">historial</div></div><div class="metric"><div class="ml">Ingresos totales</div><div class="mv">$${gastoTot.toFixed(0)}</div><div class="md">acumulado</div></div><div class="metric"><div class="ml">Ticket promedio</div><div class="mv">$${visitasTot>0?(gastoTot/visitasTot).toFixed(1):'0'}</div><div class="md neu">por visita</div></div>`;
+  g('cl-tb').innerHTML = fl.map(c=>`<tr><td><span style="font-family:var(--fh);color:var(--green);font-weight:600">${c.cliente_id||'—'}</span></td><td><strong>${c.nombre}</strong><br><span style="font-size:10px;color:var(--text3)">${c.vehiculo||'—'}</span></td><td style="color:var(--text3)">${c.tel||'—'}</td><td style="color:var(--text3)">${c.email||'—'}</td><td>${c.placa?`<span style="font-family:var(--fh);font-size:12px;font-weight:600;background:var(--bg3);padding:2px 8px;border-radius:4px;border:1px solid var(--border2)">${c.placa}</span>`:'—'}</td><td><strong>${c.visitas||0}</strong></td><td><strong style="color:var(--green)">$${parseFloat(c.gasto_total||0).toFixed(0)}</strong></td><td>${bdg(c.activo!==false?'g':'r',c.activo!==false?'activo':'inactivo')}</td><td style="display:flex;gap:4px"><button class="btn bsm" onclick="editarCliente(${c.id})">✏</button><button class="btn bsm ${c.activo!==false?'bd':'bamb'}" onclick="toggleCliente(${c.id},${c.activo!==false})">${c.activo!==false?'Inactivar':'Activar'}</button></td></tr>`).join('') || `<tr><td colspan="9" class="empty-row">Sin clientes registrados</td></tr>`;
 }
 
 async function renderAdmin(){
-  if(_rol!=='admin'){
-    ['srv-tb','canal-tb','cargo-tb'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<tr><td colspan="4" style="color:var(--text3);padding:16px">Sin acceso</td></tr>';});
-    return;
-  }
-  const[{data:srvs},{data:cans},{data:cars}]=await Promise.all([sb.from('servicios').select('*').order('nombre'),sb.from('canales').select('*').order('nombre'),sb.from('cargos').select('*').order('nombre')]);
-  document.getElementById('srv-tb').innerHTML=(srvs||[]).map(s=>`<tr>
-    <td id="srv-nom-${s.id}"><strong>${s.nombre}</strong></td>
-    <td id="srv-pre-${s.id}">$${parseFloat(s.precio).toFixed(2)}</td>
-    <td>${bdg(s.activo?'g':'r',s.activo?'activo':'inactivo')}</td>
-    <td style="display:flex;gap:4px">
-      <button class="btn bsm" onclick="editServicio(${s.id},'${s.nombre}',${s.precio})">✏ Editar</button>
-      <button class="btn bsm ${s.activo?'bd':'bamb'}" onclick="toggleServicio(${s.id},${s.activo})">${s.activo?'Inactivar':'Activar'}</button>
-    </td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--text3);padding:16px">Sin servicios</td></tr>';
-  document.getElementById('canal-tb').innerHTML=(cans||[]).map(c=>`<tr>
-    <td id="can-nom-${c.id}"><strong>${c.nombre}</strong></td>
-    <td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td>
-    <td style="display:flex;gap:4px">
-      <button class="btn bsm" onclick="editCanal(${c.id},'${c.nombre}')">✏ Editar</button>
-      <button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCanal(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button>
-    </td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3);padding:16px">Sin canales</td></tr>';
-  document.getElementById('cargo-tb').innerHTML=(cars||[]).map(c=>`<tr>
-    <td id="car-nom-${c.id}"><strong>${c.nombre}</strong></td>
-    <td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td>
-    <td style="display:flex;gap:4px">
-      <button class="btn bsm" onclick="editCargo(${c.id},'${c.nombre}')">✏ Editar</button>
-      <button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCargo(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button>
-    </td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text3);padding:16px">Sin cargos</td></tr>';
-}
-
-// Edit inline functions
-function editServicio(id, nom, pre){
-  document.getElementById('srv-nom-'+id).innerHTML=`<input class="edit-input" id="ei-snom-${id}" value="${nom}" style="width:120px"/>`;
-  document.getElementById('srv-pre-'+id).innerHTML=`<input class="edit-input" id="ei-spre-${id}" value="${pre}" type="number" style="width:70px"/>`;
-  // replace edit button with save
-  const btns=document.querySelectorAll(`[onclick="editServicio(${id},'${nom}',${pre})"]`);
-  btns.forEach(b=>{b.textContent='💾 Guardar';b.onclick=()=>saveServicio(id);});
-}
-async function saveServicio(id){
-  const nom=document.getElementById('ei-snom-'+id)?.value.trim();
-  const pre=parseFloat(document.getElementById('ei-spre-'+id)?.value||0);
-  if(!nom){toast('Nombre requerido',true);return;}
-  await sb.from('servicios').update({nombre:nom,precio:pre}).eq('id',id);
-  _srvs=null;toast('Servicio actualizado ✓');renderAdmin();
-}
-
-function editCanal(id, nom){
-  document.getElementById('can-nom-'+id).innerHTML=`<input class="edit-input" id="ei-cnom-${id}" value="${nom}" style="width:140px"/>`;
-  const btns=document.querySelectorAll(`[onclick="editCanal(${id},'${nom}')"]`);
-  btns.forEach(b=>{b.textContent='💾 Guardar';b.onclick=()=>saveCanal(id);});
-}
-async function saveCanal(id){
-  const nom=document.getElementById('ei-cnom-'+id)?.value.trim();
-  if(!nom){toast('Nombre requerido',true);return;}
-  await sb.from('canales').update({nombre:nom}).eq('id',id);
-  _cans=null;toast('Canal actualizado ✓');renderAdmin();
-}
-
-function editCargo(id, nom){
-  document.getElementById('car-nom-'+id).innerHTML=`<input class="edit-input" id="ei-crnom-${id}" value="${nom}" style="width:140px"/>`;
-  const btns=document.querySelectorAll(`[onclick="editCargo(${id},'${nom}')"]`);
-  btns.forEach(b=>{b.textContent='💾 Guardar';b.onclick=()=>saveCargo(id);});
-}
-async function saveCargo(id){
-  const nom=document.getElementById('ei-crnom-'+id)?.value.trim();
-  if(!nom){toast('Nombre requerido',true);return;}
-  await sb.from('cargos').update({nombre:nom}).eq('id',id);
-  _cars=null;toast('Cargo actualizado ✓');renderAdmin();
+  const [{data:srvs},{data:cans},{data:cars}]=await Promise.all([sb.from('servicios').select('*').order('nombre'),sb.from('canales').select('*').order('nombre'),sb.from('cargos').select('*').order('nombre')]);
+  g('srv-tb').innerHTML = (srvs||[]).map(s=>`<tr><td id="srv-nom-${s.id}"><strong>${s.nombre}</strong></td><td id="srv-pre-${s.id}">$${parseFloat(s.precio).toFixed(2)}</td><td>${bdg(s.activo?'g':'r',s.activo?'activo':'inactivo')}</td><td style="display:flex;gap:4px"><button class="btn bsm" id="srv-edit-btn-${s.id}" onclick="editarServicio(${s.id},'${s.nombre.replace(/'/g,"\\'")}',${s.precio})">✏ Editar</button><button class="btn bsm ${s.activo?'bd':'bamb'}" onclick="toggleServicio(${s.id},${s.activo})">${s.activo?'Inactivar':'Activar'}</button></td></tr>`).join('') || `<tr><td colspan="4" class="empty-row">Sin servicios configurados</td></tr>`;
+  g('canal-tb').innerHTML = (cans||[]).map(c=>`<tr><td><strong>${c.nombre}</strong></td><td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td><td><button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCanal(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button></td></tr>`).join('') || `<tr><td colspan="3" class="empty-row">Sin canales configurados</td></tr>`;
+  g('cargo-tb').innerHTML = (cars||[]).map(c=>`<tr><td><strong>${c.nombre}</strong></td><td>${bdg(c.activo?'g':'r',c.activo?'activo':'inactivo')}</td><td><button class="btn bsm ${c.activo?'bd':'bamb'}" onclick="toggleCargo(${c.id},${c.activo})">${c.activo?'Inactivar':'Activar'}</button></td></tr>`).join('') || `<tr><td colspan="3" class="empty-row">Sin cargos configurados</td></tr>`;
 }
 
 async function renderUsuarios(){
-  const{data:users}=await sb.from('usuarios').select('*').order('created_at');
-  document.getElementById('users-tb').innerHTML=(users||[]).map(u=>`<tr>
-    <td>${u.email}</td>
-    <td><strong>${u.nombre||'—'}</strong></td>
-    <td><span class="role-badge ${u.rol==='admin'?'role-admin':'role-enc'}">${u.rol}</span></td>
-    <td>${bdg(u.activo?'g':'r',u.activo?'activo':'inactivo')}</td>
-    <td style="display:flex;gap:4px">
-      <button class="btn bsm ${u.rol==='admin'?'bamb':'bp'}" onclick="toggleRol(${u.id},'${u.rol}')">${u.rol==='admin'?'→ Encargado':'→ Admin'}</button>
-      <button class="btn bsm ${u.activo?'bd':'bamb'}" onclick="toggleUsuario(${u.id},${u.activo})">${u.activo?'Inactivar':'Activar'}</button>
-    </td></tr>`).join('')||'<tr><td colspan="5" style="color:var(--text3);padding:16px">Sin usuarios registrados</td></tr>';
+  const {data:users}=await sb.from('usuarios').select('*').order('created_at');
+  g('users-tb').innerHTML = (users||[]).map(u=>`<tr><td>${u.email}</td><td><strong>${u.nombre||'—'}</strong></td><td><span class="role-pill ${u.rol==='admin'?'rp-admin':'rp-enc'}">${u.rol}</span></td><td>${bdg(u.activo?'g':'r',u.activo?'activo':'inactivo')}</td><td style="display:flex;gap:4px"><button class="btn bsm ${u.rol==='admin'?'bamb':'bp'}" onclick="toggleRol(${u.id},'${u.rol}')">${u.rol==='admin'?'→ Encargado':'→ Admin'}</button><button class="btn bsm ${u.activo?'bd':'bamb'}" onclick="toggleUsuario(${u.id},${u.activo})">${u.activo?'Inactivar':'Activar'}</button></td></tr>`).join('') || `<tr><td colspan="5" class="empty-row">Sin usuarios registrados</td></tr>`;
 }
 
-async function guardarUsuario(){
-  const email=document.getElementById('u-email').value.trim().toLowerCase();
-  if(!email){toast('Ingresa el email',true);return;}
-  setBtn('btn-usr',true);
-  const{error}=await sb.from('usuarios').insert({email,nombre:document.getElementById('u-nom').value.trim(),rol:document.getElementById('u-rol').value,activo:true});
-  setBtn('btn-usr',false);
-  if(error){toast('Error: '+error.message,true);return;}
-  closeModal('m-usuario');toast('Usuario agregado ✓');renderUsuarios();
-}
-
-async function toggleRol(id, rolActual){
-  const nuevoRol=rolActual==='admin'?'encargado':'admin';
-  await sb.from('usuarios').update({rol:nuevoRol}).eq('id',id);
-  toast('Rol actualizado ✓');renderUsuarios();
-}
-
-async function toggleUsuario(id, activo){
-  await sb.from('usuarios').update({activo:!activo}).eq('id',id);
-  toast(activo?'Usuario inactivado':'Usuario activado ✓');renderUsuarios();
-}
-
-// ===== BOOT =====
+// ══════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════
 window.addEventListener('load', async () => {
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function showApp(user) {
-    setUserUI(user);
-    // Load role from DB
-    const{data:uData}=await sb.from('usuarios').select('rol,activo').eq('email',user.email.toLowerCase()).single();
-    if(!uData||!uData.activo){
-      await sb.auth.signOut();
-      const err=document.getElementById('login-err');
-      err.textContent='Tu cuenta no tiene acceso al sistema. Contacta al administrador.';
-      err.style.display='block';
-      showLogin();
-      return;
-    }
-    _rol=uData.rol;
-    // Show/hide admin nav items
-    document.querySelectorAll('.admin-only').forEach(el=>{
-      el.style.display=_rol==='admin'?'':'none';
-    });
-    // Show role badge in footer
-    const rolBadge=document.getElementById('user-rol');
-    if(rolBadge){rolBadge.textContent=_rol==='admin'?'Admin':'Encargado';rolBadge.className=`role-badge ${_rol==='admin'?'role-admin':'role-enc'}`;}
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    renderDashboard();
-  }
-
-  function showLogin() {
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-  }
-
-  // Primero verificar si hay sesión activa (incluyendo redirect de OAuth)
   const { data: { session } } = await sb.auth.getSession();
-  if (session?.user) {
-    showApp(session.user);
+  if (session?.user){
+    await initApp(session.user);
   } else {
-    showLogin();
+    g('login-screen').style.display = 'flex';
   }
 
-  // Escuchar cambios futuros (logout, login)
   sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session?.user) {
-      showApp(session.user);
-    } else if (event === 'SIGNED_OUT') {
-      showLogin();
+    if (event === 'SIGNED_IN' && session?.user){
+      await initApp(session.user);
+    } else if (event === 'SIGNED_OUT'){
+      g('app').style.display = 'none';
+      g('login-screen').style.display = 'flex';
     }
   });
 });
